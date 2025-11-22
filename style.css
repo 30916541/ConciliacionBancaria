@@ -1,0 +1,464 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    color: #3E2723;
+    background-color: #F5F1EB;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+
+/* Título principal */
+h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    border-bottom: 2px solid #5D4037;
+    padding-bottom: 1rem;
+    color: #3E2723;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    color: #4E342E;
+}
+
+/* Secciones */
+section {
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    border: 1px solid #D7CCC8;
+    border-radius: 4px;
+    background-color: #FAF9F6;
+}
+
+/* Botones */
+button {
+    background-color: #5D4037;
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: #4E342E;
+}
+
+button:active {
+    background-color: #3E2723;
+}
+
+
+#agregarMovimiento {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+#agregarMovimiento h2 {
+    margin-bottom: 0;
+    margin-right: auto;
+}
+
+#agregarAbono,
+#agregarCargo {
+    min-width: 120px;
+}
+
+/* Sección Saldo Total */
+#saldoTotal_contenedor {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+#saldoTotal h2 {
+    margin-bottom: 0;
+
+}
+
+#saldoTotal_pSaldoTotal {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #4E342E;
+    margin: 0;
+}
+
+#saldoTotal_btnVerMovimientos {
+    min-width: 120px;
+    margin-left: auto;
+    display: block;
+}
+
+/* Botón Agregar Movimiento: alinearlo a la derecha dentro de la sección */
+
+#movimientoForm_botonesMovimientos {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+#movimientoForm_btRegistrarMovimiento,
+#movimientoForm_btCancelarMovimiento {
+    margin-left: 0;
+    margin-top: 1rem;
+    min-width: 140px;
+}
+
+/* Formularios */
+#operacionesForm {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+
+#movimientoForm {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+
+label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: #4E342E;
+}
+
+input[type="text"] {
+    padding: 0.75rem;
+    border: 1px solid #BCAAA4;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #3E2723;
+    transition: border-color 0.2s ease;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #6D4C41;
+    box-shadow: 0 0 0 2px rgba(93, 64, 55, 0.2);
+}
+
+input[type="text"]::placeholder {
+    color: #A1887F;
+}
+
+select {
+    padding: 0.75rem;
+    border: 1px solid #BCAAA4;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #3E2723;
+    transition: border-color 0.2s ease;
+    cursor: pointer;
+}
+
+select:focus {
+    outline: none;
+    border-color: #6D4C41;
+    box-shadow: 0 0 0 2px rgba(93, 64, 55, 0.2);
+}
+
+select:hover {
+    border-color: #A1887F;
+}
+
+select:invalid {
+    color: #A1887F;
+}
+
+select option {
+    padding: 0.75rem;
+    background-color: #fff;
+    color: #3E2723;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+select option:hover,
+select option:focus {
+    background-color: #EFEBE9;
+    color: #4E342E;
+}
+
+select option:checked {
+    background-color: #6D4C41;
+    color: #fff;
+}
+
+select option[disabled] {
+    color: #A1887F;
+    cursor: default;
+    font-style: italic;
+}
+
+select option[value=""] {
+    display: none;
+}
+
+/* Tabla */
+#tablaMovimientos {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    margin-top: 1rem;
+}
+
+thead {
+    background-color: #5D4037;
+    color: #fff;
+}
+
+th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+tbody tr {
+    border-bottom: 1px solid #D7CCC8;
+    transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+    background-color: #EFEBE9;
+}
+
+td {
+    padding: 1rem;
+    color: #3E2723;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.25rem;
+    }
+
+    section {
+        padding: 1rem;
+    }
+
+    #agregarMovimiento {
+        flex-wrap: wrap;
+    }
+
+    #agregarMovimiento h2 {
+        margin-bottom: 1rem;
+        width: 100%;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+
+    th,
+    td {
+        padding: 0.75rem 0.5rem;
+    }
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Vista Categorías */
+#categoriaForm {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+#categoriaForm label {
+    flex-grow: 1;
+}
+
+#categoriaForm button {
+    margin-bottom: 2px;
+    /* Align with input */
+}
+
+/* Vista Conciliación */
+#conciliacionForm {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+#conciliacionForm label {
+    flex-grow: 1;
+}
+
+/* Vista Detalle */
+#detalleMovimiento {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 4px;
+    border: 1px solid #D7CCC8;
+}
+
+#detalleMovimiento p {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: #4E342E;
+    border-bottom: 1px solid #EFEBE9;
+    padding-bottom: 0.5rem;
+}
+
+#detalleMovimiento strong {
+    color: #3E2723;
+    font-weight: 600;
+    margin-right: 0.5rem;
+    min-width: 150px;
+    display: inline-block;
+}
+
+#detalle_btRegresar {
+    margin-top: 1.5rem;
+}
+
+
+
+/* Botones Regresar en Tablas */
+#tablaMovimientos_btRegresar,
+#conciliacion_btRegresar,
+#categoriaForm_btRegresar {
+    margin-bottom: 1rem;
+}
+
+/* Estilos para botones de acciones en tablas */
+td button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+    background-color: #8D6E63;
+}
+
+td button:hover {
+    background-color: #6D4C41;
+}
+
+td button.eliminar {
+    background-color: #D32F2F;
+}
+
+td button.eliminar:hover {
+    background-color: #B71C1C;
+}
+
+td button.editar {
+    background-color: #1976D2;
+}
+
+td button.editar:hover {
+    background-color: #0D47A1;
+}
+
+td button.conciliar {
+    background-color: #388E3C;
+}
+
+td button.conciliar:hover {
+    background-color: #1B5E20;
+}
+
+/* Input de archivo */
+input[type="file"] {
+    padding: 0.5rem;
+    background-color: #fff;
+    border: 1px solid #BCAAA4;
+    border-radius: 4px;
+    width: 100%;
+    color: #3E2723;
+}
+
+input[type="file"]::file-selector-button {
+    background-color: #5D4037;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 1rem;
+    transition: background-color 0.2s;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: #4E342E;
+}
+
+/* Ajustes Responsive para las nuevas vistas */
+@media (max-width: 768px) {
+    #categoriaForm {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #categoriaForm button {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    #conciliacionForm {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #conciliacionForm button {
+        width: 100%;
+    }
+
+    #editarForm {
+        grid-template-columns: 1fr;
+    }
+
+    #detalleMovimiento p {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #detalleMovimiento strong {
+        margin-bottom: 0.25rem;
+    }
+}
