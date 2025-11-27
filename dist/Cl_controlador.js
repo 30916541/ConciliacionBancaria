@@ -1,56 +1,45 @@
-import Cl_mBanco from "./Cl_mBanco.js";
-import Cl_vBanco from "./Cl_vBanco.js";
 import Cl_vCategoria from "./Cl_vCategoria.js";
 import Cl_vMovimiento from "./Cl_vMovimiento.js";
 import Cl_vConciliacion from "./Cl_vConciliacion.js";
-
-declare const Swal: any;
-
 export default class Cl_controlador {
-    private modelo: Cl_mBanco;
-    private vista: Cl_vBanco;
-    private vCategoria: Cl_vCategoria;
-    private vMovimiento: Cl_vMovimiento;
-    private vConciliacion: Cl_vConciliacion;
-    
-    constructor(modelo: Cl_mBanco, vista: Cl_vBanco) {
+    modelo;
+    vista;
+    vCategoria;
+    vMovimiento;
+    vConciliacion;
+    constructor(modelo, vista) {
         this.modelo = modelo;
         this.vista = vista;
         this.vCategoria = new Cl_vCategoria(this);
         this.vMovimiento = new Cl_vMovimiento(this);
         this.vConciliacion = new Cl_vConciliacion(this);
     }
-    
-    mostrarRegistrarMovimiento(tipo: string) {
+    mostrarRegistrarMovimiento(tipo) {
         this.vista.mostrarRegistrarMovimiento();
         this.vMovimiento.llenarCategorias(this.modelo.listarCategorias());
         this.vMovimiento.prepararFormulario(tipo);
     }
-    
     mostrarCategorias() {
         this.vista.mostrarCategorias();
         this.vCategoria.llenarTablaCategorias(this.modelo.listarCategorias());
     }
-    
     mostrarConciliacion() {
         this.vista.mostrarConciliacion();
     }
-    
     mostrarTablaMovimientos() {
         this.vista.mostrarTablaMovimientos();
         this.vista.llenarFiltroCategorias(this.modelo.listarCategorias());
         this.vista.llenarTablaMovimientos(this.modelo.listarMovimientos());
     }
-
     mostrarVistaPrincipal() {
         this.vista.mostrarVistaPrincipal();
     }
-
-    agregarMovimiento(movimiento: any) {
+    agregarMovimiento(movimiento) {
         this.modelo.addMovimiento({
             dtmovimiento: movimiento,
             callback: (error) => {
-                if (error) Swal.fire('Error', error, 'error');
+                if (error)
+                    Swal.fire('Error', error, 'error');
                 else {
                     Swal.fire('Éxito', 'Movimiento registrado correctamente', 'success');
                     this.vista.actualizarSaldo(this.modelo.SaldoActual());
@@ -60,12 +49,12 @@ export default class Cl_controlador {
             }
         });
     }
-
-    agregarCategoria(categoria: any) {
+    agregarCategoria(categoria) {
         this.modelo.addCategoria({
             dtcategoria: categoria,
             callback: (error) => {
-                if (error) Swal.fire('Error', error, 'error');
+                if (error)
+                    Swal.fire('Error', error, 'error');
                 else {
                     Swal.fire('Éxito', 'Categoría registrada correctamente', 'success');
                     this.mostrarCategorias();
@@ -73,16 +62,15 @@ export default class Cl_controlador {
             }
         });
     }
-
-    editarCategoria(categoria: any) {
+    editarCategoria(categoria) {
         this.vCategoria.cargarFormulario(categoria);
     }
-
-    actualizarCategoria(categoria: any) {
+    actualizarCategoria(categoria) {
         this.modelo.editCategoria({
             dtcategoria: categoria,
             callback: (error) => {
-                if (error) Swal.fire('Error', error, 'error');
+                if (error)
+                    Swal.fire('Error', error, 'error');
                 else {
                     Swal.fire('Éxito', 'Categoría actualizada correctamente', 'success');
                     this.mostrarCategorias();
@@ -90,8 +78,7 @@ export default class Cl_controlador {
             }
         });
     }
-
-    eliminarCategoria(categoria: any) {
+    eliminarCategoria(categoria) {
         Swal.fire({
             title: '¿Está seguro?',
             text: `¿Desea eliminar la categoría ${categoria.nombre}?`,
@@ -100,12 +87,13 @@ export default class Cl_controlador {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Sí, eliminar'
-        }).then((result: any) => {
+        }).then((result) => {
             if (result.isConfirmed) {
                 this.modelo.deleteCategoria({
                     nombre: categoria.nombre,
                     callback: (error) => {
-                        if(error) Swal.fire('Error', error, 'error');
+                        if (error)
+                            Swal.fire('Error', error, 'error');
                         else {
                             Swal.fire('Eliminado!', 'La categoría ha sido eliminada.', 'success');
                             this.mostrarCategorias();
@@ -115,8 +103,7 @@ export default class Cl_controlador {
             }
         });
     }
-
-    verMovimiento(movimiento: any) {
+    verMovimiento(movimiento) {
         this.vista.mostrarDetalle();
         const detalleFecha = document.getElementById("detalle_fecha");
         const detalleReferencia = document.getElementById("detalle_referencia");
@@ -125,28 +112,32 @@ export default class Cl_controlador {
         const detalleMonto = document.getElementById("detalle_monto");
         const detalleTipo = document.getElementById("detalle_tipo");
         const btnRegresar = document.getElementById("detalle_btRegresar");
-
-        if(detalleFecha) detalleFecha.textContent = movimiento.fechaHora;
-        if(detalleReferencia) detalleReferencia.textContent = movimiento.referencia;
-        if(detalleCategoria) detalleCategoria.textContent = movimiento.categoria;
-        if(detalleDescripcion) detalleDescripcion.textContent = movimiento.descripcion;
-        if(detalleMonto) detalleMonto.textContent = movimiento.monto;
-        if(detalleTipo) detalleTipo.textContent = movimiento.tipo;
-
-        if(btnRegresar) btnRegresar.onclick = () => this.mostrarTablaMovimientos();
+        if (detalleFecha)
+            detalleFecha.textContent = movimiento.fechaHora;
+        if (detalleReferencia)
+            detalleReferencia.textContent = movimiento.referencia;
+        if (detalleCategoria)
+            detalleCategoria.textContent = movimiento.categoria;
+        if (detalleDescripcion)
+            detalleDescripcion.textContent = movimiento.descripcion;
+        if (detalleMonto)
+            detalleMonto.textContent = movimiento.monto;
+        if (detalleTipo)
+            detalleTipo.textContent = movimiento.tipo;
+        if (btnRegresar)
+            btnRegresar.onclick = () => this.mostrarTablaMovimientos();
     }
-
-    editarMovimiento(movimiento: any) {
+    editarMovimiento(movimiento) {
         this.vista.mostrarRegistrarMovimiento();
         this.vMovimiento.llenarCategorias(this.modelo.listarCategorias());
         this.vMovimiento.cargarFormulario(movimiento);
     }
-
-    actualizarMovimiento(movimiento: any) {
+    actualizarMovimiento(movimiento) {
         this.modelo.editMovimiento({
             dtmovimiento: movimiento,
             callback: (error) => {
-                if (error) Swal.fire('Error', error, 'error');
+                if (error)
+                    Swal.fire('Error', error, 'error');
                 else {
                     Swal.fire('Éxito', 'Movimiento actualizado correctamente', 'success');
                     this.vista.actualizarSaldo(this.modelo.SaldoActual());
@@ -156,8 +147,7 @@ export default class Cl_controlador {
             }
         });
     }
-
-    eliminarMovimiento(movimiento: any) {
+    eliminarMovimiento(movimiento) {
         Swal.fire({
             title: '¿Está seguro?',
             text: `¿Desea eliminar el movimiento con referencia ${movimiento.referencia}?`,
@@ -166,12 +156,13 @@ export default class Cl_controlador {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Sí, eliminar'
-        }).then((result: any) => {
+        }).then((result) => {
             if (result.isConfirmed) {
                 this.modelo.deleteMovimiento({
                     dtmovimiento: movimiento,
                     callback: (error) => {
-                        if(error) Swal.fire('Error', error, 'error');
+                        if (error)
+                            Swal.fire('Error', error, 'error');
                         else {
                             Swal.fire('Eliminado!', 'El movimiento ha sido eliminado.', 'success');
                             this.vista.actualizarSaldo(this.modelo.SaldoActual());
@@ -182,22 +173,17 @@ export default class Cl_controlador {
             }
         });
     }
-
-    realizarConciliacion(datosBanco: any[]) {
+    realizarConciliacion(datosBanco) {
         const movimientosSistema = this.modelo.listarMovimientos();
-        const resultados: any[] = [];
-
+        const resultados = [];
         // Normalizar datos del banco (asumiendo estructura del JSON)
         // Ejemplo JSON: [{"fecha": "2023-10-27", "referencia": "123", "monto": 100.00, "descripcion": "Pago"}]
-        
         datosBanco.forEach(movBanco => {
             // Buscar coincidencia en el sistema
             // Criterio simple: Referencia y Monto coinciden
-            const coincidencia = movimientosSistema.find(movSis => 
-                movSis.referencia === movBanco.referencia && 
+            const coincidencia = movimientosSistema.find(movSis => movSis.referencia === movBanco.referencia &&
                 Math.abs(movSis.monto - Math.abs(movBanco.monto)) < 0.01 // Comparación de flotantes
             );
-
             if (coincidencia) {
                 resultados.push({
                     fechaHora: movBanco.fecha || movBanco.fechaHora,
@@ -206,7 +192,8 @@ export default class Cl_controlador {
                     estado: "Coincide",
                     referencia: movBanco.referencia
                 });
-            } else {
+            }
+            else {
                 resultados.push({
                     fechaHora: movBanco.fecha || movBanco.fechaHora,
                     categoria: "No registrado",
@@ -218,20 +205,16 @@ export default class Cl_controlador {
                 });
             }
         });
-
         this.vConciliacion.llenarTablaConciliacion(resultados);
     }
-
-    prepararConciliacionManual(movimientoBanco: any) {
+    prepararConciliacionManual(movimientoBanco) {
         // Determinar tipo basado en el monto o signo si viene del banco
         // Si el JSON tiene 'tipo', usarlo. Si no, inferir.
         let tipo = "Abono";
         if (movimientoBanco.monto < 0 || movimientoBanco.tipo === "Cargo") {
             tipo = "Cargo";
         }
-
         this.mostrarRegistrarMovimiento(tipo);
-        
         // Pre-llenar el formulario
         const dummyMov = {
             tipo: tipo,

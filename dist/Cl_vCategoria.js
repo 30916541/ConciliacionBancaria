@@ -1,32 +1,26 @@
 import Cl_vGeneral from "./tools/Cl_vGeneral.js";
-import Cl_controlador from "./Cl_controlador.js";
-
 export default class Cl_vCategoria extends Cl_vGeneral {
-    private _inNombre: HTMLInputElement;
-    private _btRegistrar: HTMLButtonElement;
-    private _btActualizar: HTMLButtonElement;
-    private _btCancelar: HTMLButtonElement;
-    private _btRegresar: HTMLButtonElement;
-    private _tablaCategorias: HTMLElement;
-    private _categoriaId: number | null = null;
-
-    constructor(controlador: Cl_controlador) {
+    _inNombre;
+    _btRegistrar;
+    _btActualizar;
+    _btCancelar;
+    _btRegresar;
+    _tablaCategorias;
+    _categoriaId = null;
+    constructor(controlador) {
         super({ formName: "categoriaForm" });
         this.controlador = controlador;
-
-        this._inNombre = document.getElementById("categoriaForm_inNombre") as HTMLInputElement;
-        this._btRegistrar = document.getElementById("categoriaForm_btRegistrar") as HTMLButtonElement;
-        this._btActualizar = document.getElementById("categoriaForm_btActualizar") as HTMLButtonElement;
-        this._btCancelar = document.getElementById("categoriaForm_btCancelar") as HTMLButtonElement;
-        this._btRegresar = document.getElementById("categoriaForm_btRegresar") as HTMLButtonElement;
-        this._tablaCategorias = document.getElementById("tablaCategorias") as HTMLElement;
-
+        this._inNombre = document.getElementById("categoriaForm_inNombre");
+        this._btRegistrar = document.getElementById("categoriaForm_btRegistrar");
+        this._btActualizar = document.getElementById("categoriaForm_btActualizar");
+        this._btCancelar = document.getElementById("categoriaForm_btCancelar");
+        this._btRegresar = document.getElementById("categoriaForm_btRegresar");
+        this._tablaCategorias = document.getElementById("tablaCategorias");
         this._btRegistrar.onclick = () => this.registrar();
         this._btActualizar.onclick = () => this.actualizar();
         this._btRegresar.onclick = () => this.controlador?.mostrarVistaPrincipal();
         this._btCancelar.onclick = () => this.prepararFormulario();
     }
-
     prepararFormulario() {
         this._inNombre.value = "";
         this._categoriaId = null;
@@ -36,8 +30,7 @@ export default class Cl_vCategoria extends Cl_vGeneral {
         this._btRegresar.classList.remove("hidden");
         this._inNombre.focus();
     }
-
-    cargarFormulario(categoria: any) {
+    cargarFormulario(categoria) {
         this._inNombre.value = categoria.nombre;
         this._categoriaId = categoria.id;
         this._btRegistrar.classList.add("hidden");
@@ -45,7 +38,6 @@ export default class Cl_vCategoria extends Cl_vGeneral {
         this._btCancelar.classList.remove("hidden");
         this._btRegresar.classList.add("hidden");
     }
-
     registrar() {
         const categoria = {
             id: null,
@@ -56,7 +48,6 @@ export default class Cl_vCategoria extends Cl_vGeneral {
         this.controlador?.agregarCategoria(categoria);
         this.prepararFormulario();
     }
-
     actualizar() {
         const categoria = {
             id: this._categoriaId,
@@ -67,24 +58,21 @@ export default class Cl_vCategoria extends Cl_vGeneral {
         this.controlador?.actualizarCategoria(categoria);
         this.prepararFormulario();
     }
-
-    llenarTablaCategorias(categorias: any[]) {
-        const tbody = document.getElementById("tablaCategorias_body") as HTMLTableSectionElement;
-        if (!tbody) return;
+    llenarTablaCategorias(categorias) {
+        const tbody = document.getElementById("tablaCategorias_body");
+        if (!tbody)
+            return;
         tbody.innerHTML = "";
         categorias.forEach(cat => {
             const row = tbody.insertRow();
             const cellNombre = row.insertCell();
             cellNombre.textContent = cat.nombre;
-            
             const cellAcciones = row.insertCell();
-            
             const btnEditar = document.createElement("button");
             btnEditar.textContent = "Editar";
             btnEditar.className = "editar";
             btnEditar.onclick = () => this.controlador?.editarCategoria(cat);
             cellAcciones.appendChild(btnEditar);
-
             const btnEliminar = document.createElement("button");
             btnEliminar.textContent = "Eliminar";
             btnEliminar.className = "eliminar";

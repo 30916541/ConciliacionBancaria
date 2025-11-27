@@ -1,28 +1,6 @@
 import Cl_mMovimiento from "./Cl_mMovimiento.js";
-
-export interface iCargo {
-    id: number | null;
-    creadoEl: string | null;
-    alias: string | null;
-    fechaHora: string;
-    referencia: string;
-    categoria: string;
-    descripcion: string;
-    monto: number;
-}
-
 export default class Cl_mCargo extends Cl_mMovimiento {
-    
-    constructor({
-        id,
-        creadoEl,
-        alias,
-        fechaHora,
-        referencia,
-        categoria,
-        descripcion,
-        monto
-    }: iCargo) {
+    constructor({ id, creadoEl, alias, fechaHora, referencia, categoria, descripcion, monto }) {
         super({
             id,
             creadoEl,
@@ -35,15 +13,12 @@ export default class Cl_mCargo extends Cl_mMovimiento {
             tipo: "Cargo"
         });
     }
-
-    montoOperacion(): number {
+    montoOperacion() {
         return -this.monto;
     }
-
     toJSON() {
         return {
             ...super.toJSON(),
         };
     }
-
 }

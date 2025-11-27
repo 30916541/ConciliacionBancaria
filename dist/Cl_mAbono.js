@@ -1,27 +1,6 @@
 import Cl_mMovimiento from "./Cl_mMovimiento.js";
-
-export interface iAbono {
-    id: number | null;
-    creadoEl: string | null;
-    alias: string | null;
-    fechaHora: string;
-    referencia: string;
-    categoria: string;
-    descripcion: string;
-    monto: number;
-}
-
 export default class Cl_mAbono extends Cl_mMovimiento {
-    constructor({
-        id,
-        creadoEl,
-        alias,
-        fechaHora,
-        referencia,
-        categoria,
-        descripcion,
-        monto
-    }: iAbono) {
+    constructor({ id, creadoEl, alias, fechaHora, referencia, categoria, descripcion, monto }) {
         super({
             id,
             creadoEl,
@@ -34,11 +13,9 @@ export default class Cl_mAbono extends Cl_mMovimiento {
             tipo: "Abono"
         });
     }
-
-    montoOperacion(): number {
+    montoOperacion() {
         return this.monto;
     }
-
     toJSON() {
         return {
             ...super.toJSON(),

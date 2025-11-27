@@ -1,33 +1,28 @@
 import Cl_vGeneral from "./tools/Cl_vGeneral.js";
-import Cl_controlador from "./Cl_controlador.js";
-
 export default class Cl_vMovimiento extends Cl_vGeneral {
-    private _inFechaHora: HTMLInputElement;
-    private _inReferencia: HTMLInputElement;
-    private _inCategoria: HTMLSelectElement;
-    private _inDescripcion: HTMLInputElement;
-    private _inMonto: HTMLInputElement;
-    private _btRegistrar: HTMLButtonElement;
-    private _btActualizar: HTMLButtonElement;
-    private _btCancelar: HTMLButtonElement;
-    private _lblTipoMovimiento: HTMLElement;
-    private _tipoMovimiento: string = "";
-    private _movimientoId: number | null = null;
-
-    constructor(controlador: Cl_controlador) {
+    _inFechaHora;
+    _inReferencia;
+    _inCategoria;
+    _inDescripcion;
+    _inMonto;
+    _btRegistrar;
+    _btActualizar;
+    _btCancelar;
+    _lblTipoMovimiento;
+    _tipoMovimiento = "";
+    _movimientoId = null;
+    constructor(controlador) {
         super({ formName: "movimientoForm" });
         this.controlador = controlador;
-
-        this._inFechaHora = document.getElementById("movimientoForm_inFechaHora") as HTMLInputElement;
-        this._inReferencia = document.getElementById("movimientoForm_inReferencia") as HTMLInputElement;
-        this._inCategoria = document.getElementById("movimientoForm_inCategoria") as HTMLSelectElement;
-        this._inDescripcion = document.getElementById("movimientoForm_inDescripcion") as HTMLInputElement;
-        this._inMonto = document.getElementById("movimientoForm_inMonto") as HTMLInputElement;
-        this._btRegistrar = document.getElementById("movimientoForm_btRegistrarMovimiento") as HTMLButtonElement;
-        this._btActualizar = document.getElementById("movimientoForm_btActualizarMovimiento") as HTMLButtonElement;
-        this._btCancelar = document.getElementById("movimientoForm_btCancelarMovimiento") as HTMLButtonElement;
-        this._lblTipoMovimiento = document.getElementById("movimientoForm_lblTipoMovimiento") as HTMLElement;
-
+        this._inFechaHora = document.getElementById("movimientoForm_inFechaHora");
+        this._inReferencia = document.getElementById("movimientoForm_inReferencia");
+        this._inCategoria = document.getElementById("movimientoForm_inCategoria");
+        this._inDescripcion = document.getElementById("movimientoForm_inDescripcion");
+        this._inMonto = document.getElementById("movimientoForm_inMonto");
+        this._btRegistrar = document.getElementById("movimientoForm_btRegistrarMovimiento");
+        this._btActualizar = document.getElementById("movimientoForm_btActualizarMovimiento");
+        this._btCancelar = document.getElementById("movimientoForm_btCancelarMovimiento");
+        this._lblTipoMovimiento = document.getElementById("movimientoForm_lblTipoMovimiento");
         this._btRegistrar.onclick = () => this.registrar();
         this._btActualizar.onclick = () => this.actualizar();
         this._btCancelar.onclick = () => {
@@ -35,8 +30,7 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
             this.controlador?.mostrarVistaPrincipal();
         };
     }
-
-    prepararFormulario(tipo: string) {
+    prepararFormulario(tipo) {
         this.show();
         this._tipoMovimiento = tipo;
         this._lblTipoMovimiento.textContent = tipo;
@@ -45,14 +39,12 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
         this._inCategoria.value = "";
         this._inDescripcion.value = "";
         this._inMonto.value = "";
-        
         this._btRegistrar.classList.remove("hidden");
         this._btActualizar.classList.add("hidden");
         this._inReferencia.disabled = false; // Allow editing reference only on create? Usually ID is locked, reference might be editable but it's the key in some systems. Let's assume editable for now or locked if it's the key. The model uses reference as alias? No, ID is ID.
         // In Cl_mBanco, editRecord uses object. The ID is in the object.
     }
-
-    cargarFormulario(movimiento: any) {
+    cargarFormulario(movimiento) {
         this.show();
         this._tipoMovimiento = movimiento.tipo;
         this._lblTipoMovimiento.textContent = movimiento.tipo;
@@ -62,18 +54,14 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
         this._inDescripcion.value = movimiento.descripcion;
         this._inMonto.value = movimiento.monto;
         this._movimientoId = movimiento.id;
-
         this._btRegistrar.classList.add("hidden");
         this._btActualizar.classList.remove("hidden");
-        
         // Re-asignar el evento onclick para asegurar que funcione
         this._btActualizar.onclick = () => this.actualizar();
     }
-
     ocultarFormulario() {
         this.show({ ver: false });
     }
-
     registrar() {
         const movimiento = {
             id: null,
@@ -88,11 +76,9 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
         };
         this.controlador?.agregarMovimiento(movimiento);
     }
-
     actualizar() {
         console.log("Botón actualizar presionado");
         // alert("Botón actualizar presionado"); // Descomentar si es necesario para depurar
-
         const movimiento = {
             id: this._movimientoId,
             creadoEl: null,
@@ -107,7 +93,7 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
         console.log("Enviando movimiento a actualizar:", movimiento);
         this.controlador?.actualizarMovimiento(movimiento);
     }
-    llenarCategorias(categorias: any[]) {
+    llenarCategorias(categorias) {
         this._inCategoria.innerHTML = "";
         const defaultOption = document.createElement("option");
         defaultOption.value = "";
@@ -116,7 +102,6 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
         defaultOption.selected = true;
         defaultOption.hidden = true;
         this._inCategoria.appendChild(defaultOption);
-
         categorias.forEach(cat => {
             const option = document.createElement("option");
             option.value = cat.nombre;
@@ -124,7 +109,7 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
             this._inCategoria.appendChild(option);
         });
     }
-    prellenarFormulario(movimiento: any) {
+    prellenarFormulario(movimiento) {
         this.show();
         this._tipoMovimiento = movimiento.tipo;
         this._lblTipoMovimiento.textContent = movimiento.tipo;
@@ -133,7 +118,6 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
         this._inCategoria.value = movimiento.categoria || "";
         this._inDescripcion.value = movimiento.descripcion || "";
         this._inMonto.value = movimiento.monto || "";
-        
         // Asegurar que estamos en modo registrar
         this._btRegistrar.classList.remove("hidden");
         this._btActualizar.classList.add("hidden");

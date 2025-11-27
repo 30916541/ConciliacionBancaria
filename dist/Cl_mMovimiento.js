@@ -1,36 +1,12 @@
 import Cl_mTablaWeb from "./tools/Cl_mTablaWeb.js";
-
-export interface iMovimiento {
-    id: number | null;
-    creadoEl: string | null;
-    alias: string | null;
-    fechaHora: string;
-    referencia: string;
-    categoria: string;
-    descripcion: string;
-    monto: number;
-    tipo: string;
-}
-
-export default class Cl_mMovimiento extends Cl_mTablaWeb{
-    private _fechaHora = "";
-    private _referencia = "";
-    private _categoria = "";
-    private _descripcion = "";
-    private _monto = 0;
-    private _tipo = "";
-    
-    constructor({
-        id,
-        creadoEl,
-        alias,
-        fechaHora,
-        referencia,
-        categoria,
-        descripcion,
-        monto,
-        tipo
-    }: iMovimiento = {
+export default class Cl_mMovimiento extends Cl_mTablaWeb {
+    _fechaHora = "";
+    _referencia = "";
+    _categoria = "";
+    _descripcion = "";
+    _monto = 0;
+    _tipo = "";
+    constructor({ id, creadoEl, alias, fechaHora, referencia, categoria, descripcion, monto, tipo } = {
         id: null,
         creadoEl: null,
         alias: null,
@@ -41,7 +17,7 @@ export default class Cl_mMovimiento extends Cl_mTablaWeb{
         monto: 0,
         tipo: ""
     }) {
-        super({id, creadoEl, alias});
+        super({ id, creadoEl, alias });
         this.fechaHora = fechaHora;
         this.referencia = referencia;
         this.categoria = categoria;
@@ -49,74 +25,59 @@ export default class Cl_mMovimiento extends Cl_mTablaWeb{
         this.monto = monto;
         this.tipo = tipo;
     }
-
-    set fechaHora(fechaHora: string) {
+    set fechaHora(fechaHora) {
         this._fechaHora = fechaHora;
     }
-
-    get fechaHora(): string {
+    get fechaHora() {
         return this._fechaHora;
     }
-
-    set referencia(referencia: string) {
+    set referencia(referencia) {
         this._referencia = referencia;
     }
-
-    get referencia(): string {
+    get referencia() {
         return this._referencia;
     }
-
-    set categoria(categoria: string) {
+    set categoria(categoria) {
         this._categoria = categoria;
     }
-
-    get categoria(): string {
+    get categoria() {
         return this._categoria;
     }
-
-    set descripcion(descripcion: string) {
+    set descripcion(descripcion) {
         this._descripcion = descripcion;
     }
-
-    get descripcion(): string {
+    get descripcion() {
         return this._descripcion;
     }
-
-    set monto(monto: number) {
+    set monto(monto) {
         this._monto = monto;
     }
-
-    get monto(): number {
+    get monto() {
         return this._monto;
     }
-
-    set tipo(tipo: string) {
+    set tipo(tipo) {
         this._tipo = tipo;
     }
-
-    get tipo(): string {
+    get tipo() {
         return this._tipo;
     }
-
-    montoOperacion(): number {
+    montoOperacion() {
         return this._monto;
     }
-
-    get referenciaOK(): boolean {
+    get referenciaOK() {
         return this._referencia.length === 13;
-    } 
-
-    get montoOK(): boolean {
+    }
+    get montoOK() {
         return this._monto > 0;
     }
-
-    get movimientoOK(): string | true {
-        if (!this.referenciaOK) return "Referencia";
-        if (!this.montoOK) return "Monto";
+    get movimientoOK() {
+        if (!this.referenciaOK)
+            return "Referencia";
+        if (!this.montoOK)
+            return "Monto";
         return true;
     }
-
-    toJSON(): iMovimiento {
+    toJSON() {
         return {
             id: this.id,
             creadoEl: this.creadoEl,
