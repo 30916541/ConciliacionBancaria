@@ -1,0 +1,42 @@
+[
+    {
+        "fechaHora": "20-11-2025 11:00",
+        "referencia": "0000000000002",
+        "categoria": "Transporte",
+        "descripcion": "Ruta Universidad",
+        "monto": 50.00,
+        "tipo": "Cargo"
+    },
+    {
+        "fechaHora": "20-11-2025 17:00",
+        "referencia": "0000000000003",
+        "categoria": "Transporte",
+        "descripcion": "Ruta Universidad",
+        "monto": 50.00,
+        "tipo": "Cargo"
+    },
+    {
+        "fechaHora": "20-11-2025 08:00",
+        "referencia": "0000000000005",
+        "categoria": "Alimentos",
+        "descripcion": "Desayuno",
+        "monto": 450.00,
+        "tipo": "Cargo"
+    },
+    {
+        "fechaHora": "26-11-2025 08:15",
+        "referencia": "0000000000009",
+        "categoria": "Internet",
+        "descripcion": "Pago de internet",
+        "monto": 1000.00,
+        "tipo": "Cargo"
+    },
+    {
+        "fechaHora": "26-11-2025 10:30",
+        "referencia": "0000000000010",
+        "categoria": "Ingresos",
+        "descripcion": "Salario",
+        "monto": 4500.00,
+        "tipo": "Abono"
+    }
+]

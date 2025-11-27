@@ -13,6 +13,7 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
     private _lblTipoMovimiento: HTMLElement;
     private _tipoMovimiento: string = "";
     private _movimientoId: number | null = null;
+    private _desdeConciliacion: boolean = false; // Nuevo atributo
 
     constructor(controlador: Cl_controlador) {
         super({ formName: "movimientoForm" });
@@ -45,6 +46,7 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
         this._inCategoria.value = "";
         this._inDescripcion.value = "";
         this._inMonto.value = "";
+        this._desdeConciliacion = false; // Resetear flag
         
         this._btRegistrar.classList.remove("hidden");
         this._btActualizar.classList.add("hidden");
@@ -62,6 +64,7 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
         this._inDescripcion.value = movimiento.descripcion;
         this._inMonto.value = movimiento.monto;
         this._movimientoId = movimiento.id;
+        this._desdeConciliacion = false; // No viene de conciliación
 
         this._btRegistrar.classList.add("hidden");
         this._btActualizar.classList.remove("hidden");
@@ -86,7 +89,13 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
             monto: parseFloat(this._inMonto.value),
             tipo: this._tipoMovimiento
         };
-        this.controlador?.agregarMovimiento(movimiento);
+        
+        // Usar método especial si viene de conciliación
+        if (this._desdeConciliacion) {
+            this.controlador?.agregarMovimientoDesdeConciliacion(movimiento);
+        } else {
+            this.controlador?.agregarMovimiento(movimiento);
+        }
     }
 
     actualizar() {
@@ -133,6 +142,9 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
         this._inCategoria.value = movimiento.categoria || "";
         this._inDescripcion.value = movimiento.descripcion || "";
         this._inMonto.value = movimiento.monto || "";
+        
+        // Establecer flag si viene de conciliación
+        this._desdeConciliacion = movimiento.desdeConciliacion || false;
         
         // Asegurar que estamos en modo registrar
         this._btRegistrar.classList.remove("hidden");

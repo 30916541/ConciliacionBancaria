@@ -12,6 +12,7 @@ export default class Cl_controlador {
     private vCategoria: Cl_vCategoria;
     private vMovimiento: Cl_vMovimiento;
     private vConciliacion: Cl_vConciliacion;
+    private resultadosConciliacion: any[] = []; // Almacenar resultados de conciliación
     
     constructor(modelo: Cl_mBanco, vista: Cl_vBanco) {
         this.modelo = modelo;
@@ -203,23 +204,57 @@ export default class Cl_controlador {
                     fechaHora: movBanco.fecha || movBanco.fechaHora,
                     categoria: coincidencia.categoria,
                     monto: movBanco.monto,
-                    estado: "Coincide",
+                    estado: "Conciliado",
                     referencia: movBanco.referencia
                 });
             } else {
                 resultados.push({
                     fechaHora: movBanco.fecha || movBanco.fechaHora,
-                    categoria: "No registrado",
+                    categoria: movBanco.categoria || "No registrado",
                     monto: movBanco.monto,
-                    estado: "No coincide",
+                    estado: "No Conciliado",
                     referencia: movBanco.referencia,
                     descripcion: movBanco.descripcion,
-                    tipo: movBanco.monto > 0 ? "Abono" : "Cargo" // Asumiendo signo
+                    tipo: movBanco.tipo || (movBanco.monto > 0 ? "Abono" : "Cargo")
                 });
             }
         });
 
+        // Guardar resultados para poder actualizarlos después
+        this.resultadosConciliacion = resultados;
         this.vConciliacion.llenarTablaConciliacion(resultados);
+    }
+
+    agregarMovimientoDesdeConciliacion(movimiento: any) {
+        this.modelo.addMovimiento({
+            dtmovimiento: movimiento,
+            callback: (error) => {
+                if (error) Swal.fire('Error', error, 'error');
+                else {
+                    Swal.fire('Éxito', 'Movimiento registrado correctamente', 'success');
+                    this.vista.actualizarSaldo(this.modelo.SaldoActual());
+                    this.vMovimiento.ocultarFormulario();
+                    
+                    // Actualizar la tabla de conciliación
+                    this.actualizarTablaConciliacion(movimiento.referencia);
+                    
+                    // Regresar a la vista de conciliación
+                    this.mostrarConciliacion();
+                }
+            }
+        });
+    }
+
+    actualizarTablaConciliacion(referencia: string) {
+        // Buscar el movimiento en los resultados y actualizar su estado
+        const resultado = this.resultadosConciliacion.find(r => r.referencia === referencia);
+        if (resultado) {
+            resultado.estado = "Conciliado";
+            resultado.categoria = this.modelo.listarMovimientos().find(m => m.referencia === referencia)?.categoria || resultado.categoria;
+        }
+        
+        // Volver a llenar la tabla con los resultados actualizados
+        this.vConciliacion.llenarTablaConciliacion(this.resultadosConciliacion);
     }
 
     prepararConciliacionManual(movimientoBanco: any) {
@@ -232,15 +267,16 @@ export default class Cl_controlador {
 
         this.mostrarRegistrarMovimiento(tipo);
         
-        // Pre-llenar el formulario
+        // Pre-llenar el formulario con la categoría del banco
         const dummyMov = {
             tipo: tipo,
             fechaHora: movimientoBanco.fechaHora,
             referencia: movimientoBanco.referencia,
-            categoria: "",
+            categoria: movimientoBanco.categoria || "", // Usar la categoría del banco
             descripcion: movimientoBanco.descripcion || "Conciliación manual",
             monto: Math.abs(movimientoBanco.monto),
-            id: null
+            id: null,
+            desdeConciliacion: true // Marcar que viene de conciliación
         };
         this.vMovimiento.prellenarFormulario(dummyMov);
     }

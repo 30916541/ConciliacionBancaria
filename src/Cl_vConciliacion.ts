@@ -50,7 +50,7 @@ export default class Cl_vConciliacion extends Cl_vGeneral {
         
         resultados.forEach(res => {
             const row = tbody.insertRow();
-            const claseEstado = res.estado === "Coincide" ? "status-success" : "status-pending";
+            const claseEstado = res.estado === "Conciliado" ? "status-success" : "status-error";
             
             row.innerHTML = `
                 <td>${res.fechaHora}</td>
@@ -58,12 +58,12 @@ export default class Cl_vConciliacion extends Cl_vGeneral {
                 <td>${res.monto}</td>
                 <td><span class="status-badge ${claseEstado}">${res.estado}</span></td>
                 <td>
-                    ${res.estado !== "Coincide" ? `<button class="conciliar">Conciliar</button>` : ""}
+                    ${res.estado !== "Conciliado" ? `<button class="conciliar">Conciliar</button>` : ""}
                 </td>
             `;
             
             // Si queremos agregar funcionalidad al botón conciliar manual, podemos hacerlo aquí
-            if (res.estado !== "Coincide") {
+            if (res.estado !== "Conciliado") {
                 const btnConciliar = row.querySelector(".conciliar") as HTMLButtonElement;
                 if(btnConciliar) {
                     btnConciliar.onclick = () => {
@@ -74,7 +74,7 @@ export default class Cl_vConciliacion extends Cl_vGeneral {
                             text: "Se abrirá el formulario de registro con los datos precargados.",
                             icon: 'question',
                             showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
+                            confirmButtonColor: '#388E3C',
                             cancelButtonColor: '#d33',
                             confirmButtonText: 'Sí, registrar'
                         }).then((result: any) => {

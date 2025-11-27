@@ -675,6 +675,12 @@ input[type="file"]::file-selector-button:hover {
     border: 1px solid #C8E6C9;
 }
 
+.status-error {
+    background-color: #FFEBEE;
+    color: #C62828;
+    border: 1px solid #FFCDD2;
+}
+
 /* Filtros de Movimientos */
 #filtrosMovimientos {
     display: flex;
