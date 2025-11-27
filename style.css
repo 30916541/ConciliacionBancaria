@@ -189,6 +189,33 @@ input[type="text"]::placeholder {
     color: #A1887F;
 }
 
+input[type="date"] {
+    padding: 0.75rem;
+    border: 1px solid #BCAAA4;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #3E2723;
+    transition: border-color 0.2s ease;
+    font-family: inherit;
+}
+
+input[type="date"]:focus {
+    outline: none;
+    border-color: #6D4C41;
+    box-shadow: 0 0 0 2px rgba(93, 64, 55, 0.2);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
 select {
     padding: 0.75rem;
     border: 1px solid #BCAAA4;
@@ -740,6 +767,21 @@ input[type="file"]::file-selector-button:hover {
     .filtro-grupo {
         width: 100%;
         min-width: 100%;
+    }
+
+    /* Mejorar inputs de fecha en móviles */
+    .filtro-grupo input[type="date"] {
+        padding: 0.75rem;
+        font-size: 1rem;
+        min-height: 44px;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+    .filtro-grupo input[type="date"]::-webkit-calendar-picker-indicator {
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0.25rem;
     }
 
     .filtro-botones {
