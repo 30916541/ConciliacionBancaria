@@ -504,10 +504,22 @@ td {
 
 /* Estilos para botones de acciones en tablas */
 td button {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem;
     font-size: 0.9rem;
     margin-right: 0.5rem;
     background-color: #8D6E63;
+    min-width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+td button svg {
+    display: block;
+    width: 18px;
+    height: 18px;
 }
 
 td button:last-child {
@@ -516,6 +528,8 @@ td button:last-child {
 
 td button:hover {
     background-color: #6D4C41;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 td button.eliminar {
@@ -532,6 +546,14 @@ td button.editar {
 
 td button.editar:hover {
     background-color: #0D47A1;
+}
+
+td button.ver {
+    background-color: #8D6E63;
+}
+
+td button.ver:hover {
+    background-color: #6D4C41;
 }
 
 td button.conciliar {
