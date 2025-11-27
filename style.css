@@ -12,6 +12,9 @@ body {
     padding: 2rem;
     max-width: 1400px;
     margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 
@@ -759,4 +762,47 @@ input[type="file"]::file-selector-button:hover {
 .monto-abono {
     color: #2E7D32;
     font-weight: 600;
+}
+
+/* Contenedor principal */
+#banco {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Footer */
+#footer {
+    text-align: center;
+    padding: 2rem 1rem 1rem;
+    margin-top: auto;
+    border-top: 1px solid #D7CCC8;
+    background-color: transparent;
+}
+
+#footer p {
+    font-size: 0.9rem;
+    color: #8D6E63;
+    margin: 0;
+    font-weight: 400;
+}
+
+.footer-brand {
+    font-weight: 600;
+    background: linear-gradient(135deg, #5D4037 0%, #8D6E63 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+    #footer {
+        padding: 1.5rem 1rem 0.75rem;
+        margin-top: 2rem;
+    }
+
+    #footer p {
+        font-size: 0.85rem;
+    }
 }
