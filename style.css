@@ -18,7 +18,7 @@ body {
 }
 
 
-/* Título principal */
+
 h1 {
     font-size: 2rem;
     font-weight: 600;
@@ -36,7 +36,7 @@ h2 {
     color: #4E342E;
 }
 
-/* Secciones */
+
 section {
     margin-bottom: 3rem;
     padding: 1.5rem;
@@ -45,7 +45,7 @@ section {
     background-color: #FAF9F6;
 }
 
-/* Botones */
+
 button {
     background-color: #5D4037;
     color: #fff;
@@ -71,7 +71,7 @@ button:active {
     display: flex;
     align-items: center;
     gap: 1rem;
-    /* margin-bottom: 1.5rem; Removed for symmetry */
+
 }
 
 #agregarMovimiento h2 {
@@ -104,7 +104,7 @@ button:active {
     align-items: center;
 }
 
-/* Sección Saldo Total */
+
 #saldoTotal_contenedor {
     display: flex;
     align-items: center;
@@ -130,7 +130,7 @@ button:active {
     display: block;
 }
 
-/* Botón Agregar Movimiento: alinearlo a la derecha dentro de la sección */
+
 
 #movimientoForm_botonesMovimientos {
     display: flex;
@@ -146,7 +146,7 @@ button:active {
     min-width: 140px;
 }
 
-/* Formularios */
+
 #operacionesForm {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -270,7 +270,7 @@ select option[value=""] {
     display: none;
 }
 
-/* Tabla */
+
 #tablaMovimientos_header {
     display: flex;
     justify-content: space-between;
@@ -326,7 +326,7 @@ td {
     text-align: center;
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
     body {
         padding: 1rem;
@@ -345,13 +345,13 @@ td {
         padding: 1rem;
     }
 
-    /* Contenedores principales */
+
     #acciones_contenedor {
         flex-direction: column;
         gap: 1.5rem;
     }
 
-    /* Agregar Movimiento */
+
     #agregarMovimiento {
         flex-direction: column;
         align-items: stretch;
@@ -369,7 +369,7 @@ td {
         width: 100%;
     }
 
-    /* Formularios */
+
     #movimientoForm {
         grid-template-columns: 1fr;
         gap: 1rem;
@@ -386,7 +386,7 @@ td {
         margin-top: 0;
     }
 
-    /* Operaciones */
+
     #botonesOperaciones {
         flex-direction: column;
         width: 100%;
@@ -397,7 +397,7 @@ td {
         width: 100%;
     }
 
-    /* Saldo Total */
+
     #saldoTotal_contenedor {
         flex-direction: column;
         align-items: center;
@@ -410,7 +410,7 @@ td {
         margin-left: 0;
     }
 
-    /* Tablas */
+
     #tablaMovimientos_header {
         flex-direction: column;
         gap: 1rem;
@@ -433,12 +433,12 @@ td {
         padding: 0.75rem 0.5rem;
     }
 
-    /* Acciones en tabla */
+
     td button {
         margin-bottom: 0.25rem;
     }
 
-    /* Ajuste específico para Tabla de Categorías en móvil */
+
     #tablaCategorias {
         display: table;
         width: 100%;
@@ -463,7 +463,7 @@ td {
     display: none !important;
 }
 
-/* Vista Categorías */
+
 #categoriaForm {
     display: flex;
     align-items: flex-end;
@@ -477,10 +477,10 @@ td {
 
 #categoriaForm button {
     margin-bottom: 2px;
-    /* Align with input */
+
 }
 
-/* Vista Conciliación */
+
 #conciliacionForm {
     display: flex;
     align-items: flex-end;
@@ -497,7 +497,7 @@ td {
     flex-grow: 1;
 }
 
-/* Vista Detalle */
+
 #detalleMovimiento {
     background-color: #fff;
     padding: 2rem;
@@ -527,12 +527,12 @@ td {
 
 
 
-/* Botones Regresar en Tablas */
+
 #categoriaForm_btRegresar {
     margin-bottom: 1rem;
 }
 
-/* Estilos para botones de acciones en tablas */
+
 td button {
     padding: 0.5rem;
     font-size: 0.9rem;
@@ -594,7 +594,7 @@ td button.conciliar:hover {
     background-color: #1B5E20;
 }
 
-/* Input de archivo */
+
 input[type="file"] {
     padding: 0.5rem;
     background-color: #fff;
@@ -619,7 +619,7 @@ input[type="file"]::file-selector-button:hover {
     background-color: #4E342E;
 }
 
-/* Ajustes Responsive para las nuevas vistas */
+
 @media (max-width: 768px) {
     #categoriaForm {
         flex-direction: column;
@@ -654,7 +654,7 @@ input[type="file"]::file-selector-button:hover {
     }
 }
 
-/* Status Badges */
+
 .status-badge {
     padding: 0.25rem 0.75rem;
     border-radius: 50px;
@@ -681,7 +681,7 @@ input[type="file"]::file-selector-button:hover {
     border: 1px solid #FFCDD2;
 }
 
-/* Filtros de Movimientos */
+
 #filtrosMovimientos {
     display: flex;
     flex-wrap: wrap;
@@ -730,7 +730,7 @@ input[type="file"]::file-selector-button:hover {
     gap: 0.75rem;
     align-items: flex-end;
     padding-bottom: 2px;
-    /* Align with inputs visually */
+
 }
 
 #btn_aplicar_filtros {
@@ -751,7 +751,7 @@ input[type="file"]::file-selector-button:hover {
     background-color: #6D4C41;
 }
 
-/* Responsive para filtros */
+
 @media (max-width: 1024px) {
     #filtrosMovimientos {
         gap: 1rem;
@@ -759,7 +759,7 @@ input[type="file"]::file-selector-button:hover {
 
     .filtro-grupo {
         min-width: 45%;
-        /* 2 columns on tablets */
+
     }
 }
 
@@ -775,7 +775,7 @@ input[type="file"]::file-selector-button:hover {
         min-width: 100%;
     }
 
-    /* Mejorar inputs de fecha en móviles */
+
     .filtro-grupo input[type="date"] {
         padding: 0.75rem;
         font-size: 1rem;
@@ -801,7 +801,7 @@ input[type="file"]::file-selector-button:hover {
     }
 }
 
-/* Colores para montos en tabla */
+
 .monto-cargo {
     color: #D32F2F;
     font-weight: 600;
@@ -812,14 +812,14 @@ input[type="file"]::file-selector-button:hover {
     font-weight: 600;
 }
 
-/* Contenedor principal */
+
 #banco {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
-/* Footer */
+
 #footer {
     text-align: center;
     padding: 2rem 1rem 1rem;

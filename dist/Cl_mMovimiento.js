@@ -69,7 +69,9 @@ export default class Cl_mMovimiento extends Cl_mTablaWeb {
         return regex.test(this._fechaHora);
     }
     get referenciaOK() {
-        return this._referencia.length === 13;
+        const regex = /^[A-Za-z]{3}-\d{3}$/;
+        this._referencia = this._referencia.toUpperCase();
+        return regex.test(this._referencia);
     }
     get tipoOK() {
         return this._tipo === "Abono" || this._tipo === "Cargo";

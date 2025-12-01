@@ -166,7 +166,7 @@ Conciliacion Bancaria/
 
 **Atributos**:
 - `private _fechaHora: string` - Fecha y hora del movimiento
-- `private _referencia: string` - Número de referencia único (13 caracteres)
+- `private _referencia: string` - Número de referencia único (formato AAA-000)
 - `private _categoria: string` - Categoría del movimiento
 - `private _descripcion: string` - Descripción del movimiento
 - `private _monto: number` - Monto del movimiento
@@ -183,7 +183,7 @@ Conciliacion Bancaria/
 | `monto(value)` / `monto()` | Setter/Getter de monto | number |
 | `tipo(value)` / `tipo()` | Setter/Getter de tipo | string |
 | `montoOperacion()` | Retorna el monto positivo para Abonos y negativo para Cargos | number |
-| `referenciaOK` | Valida que referencia tenga 13 caracteres | boolean |
+| `referenciaOK` | Valida que referencia tenga formato AAA-000 | boolean |
 | `montoOK` | Valida que monto sea mayor a 0 | boolean |
 | `movimientoOK` | Valida todo el movimiento | string \| true |
 | `toJSON()` | Convierte a objeto JSON | iMovimiento |
@@ -573,7 +573,7 @@ Para movimientos "No Conciliado":
 - ✅ Edición de movimientos existentes
 - ✅ Eliminación con confirmación
 - ✅ Visualización detallada
-- ✅ Validación de referencia (13 caracteres)
+- ✅ Validación de referencia (formato AAA-000)
 - ✅ Validación de monto (mayor a 0)
 
 ### 2. **Gestión de Categorías**
@@ -643,7 +643,7 @@ Para movimientos "No Conciliado":
 [
   {
     "fechaHora": "25-11-2024 14:30",
-    "referencia": "1234567890123",
+    "referencia": "MOV-001",
     "categoria": "Ventas",
     "descripcion": "Pago cliente",
     "monto": 1500.00,
@@ -732,7 +732,7 @@ El archivo `tsconfig.json` está configurado para:
 ## 📝 Notas Adicionales
 
 ### Formato de Referencia
-Las referencias deben tener exactamente 13 caracteres. Ejemplo: `1234567890123`
+Las referencias deben seguir el formato `AAA-000`. Ejemplo: `MOV-001`
 
 ### Formato de Fecha
 Las fechas se manejan en formato: `DD-MM-YYYY HH:mm`
@@ -751,4 +751,4 @@ Las fechas se manejan en formato: `DD-MM-YYYY HH:mm`
 ---
 
 **Versión**: 1.0  
-**Última actualización**: Noviembre 2024
+**Última actualización**: Diciembre 2025

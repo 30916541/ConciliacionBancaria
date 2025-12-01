@@ -32,7 +32,7 @@ export default class Cl_vBanco extends Cl_vGeneral {
         this._lblSaldoTotal = document.getElementById("saldoTotal_pSaldoTotal") as HTMLElement;
         const btRegresarTablaMovimientos = document.getElementById("tablaMovimientos_btRegresar") as HTMLButtonElement;
         
-        // Filtros
+
         const btnFiltrar = document.getElementById("btn_aplicar_filtros") as HTMLButtonElement;
         const btnLimpiar = document.getElementById("btn_limpiar_filtros") as HTMLButtonElement;
 
@@ -89,13 +89,10 @@ export default class Cl_vBanco extends Cl_vGeneral {
         this.ocultarTodo();
         this._secTablaMovimientos.style.display = "block";
         
-        // Llenar select de categorías en filtros si está vacío
+
         const filtroCategoria = document.getElementById("filtro_categoria") as HTMLSelectElement;
-        if (filtroCategoria && filtroCategoria.options.length <= 1) { // Solo tiene la opción "Todas"
-             // Esto idealmente debería venir del controlador, pero para simplificar aquí:
-             // Necesitamos las categorías. Podemos pedirlas al controlador si modificamos la firma, 
-             // o simplemente dejar que el usuario filtre por texto si no queremos complicar la dependencia aquí.
-             // O mejor, llamamos a un método público para actualizar filtros.
+        if (filtroCategoria && filtroCategoria.options.length <= 1) {
+
         }
     }
 
@@ -123,7 +120,7 @@ export default class Cl_vBanco extends Cl_vGeneral {
         if (!tbody) return;
         tbody.innerHTML = "";
 
-        // Obtener valores de filtros
+
         const busqueda = (document.getElementById("filtro_busqueda") as HTMLInputElement)?.value.toLowerCase() || "";
         const categoria = (document.getElementById("filtro_categoria") as HTMLSelectElement)?.value || "";
         const tipo = (document.getElementById("filtro_tipo") as HTMLSelectElement)?.value || "";
@@ -140,15 +137,10 @@ export default class Cl_vBanco extends Cl_vGeneral {
             
             let cumpleFecha = true;
             if (fechaInicio || fechaFin) {
-                // Asumiendo formato DD-MM-YYYY HH:mm o similar en mov.fechaHora
-                // Convertir a objeto Date para comparar. 
-                // Nota: mov.fechaHora es string. Necesitamos parsearlo correctamente.
-                // Si el formato es consistente, podemos intentar compararlo.
-                // Para simplificar, comparamos strings si el formato es ISO, pero aquí es 'DD-MM-YYYY HH:mm'.
-                // Vamos a intentar convertirlo.
-                const partes = mov.fechaHora.split(' ')[0].split('-'); // [DD, MM, YYYY]
+
+                const partes = mov.fechaHora.split(' ')[0].split('-');
                 if (partes.length === 3) {
-                    const fechaMov = new Date(`${partes[2]}-${partes[1]}-${partes[0]}`); // YYYY-MM-DD
+                    const fechaMov = new Date(`${partes[2]}-${partes[1]}-${partes[0]}`);
                     if (fechaInicio) {
                         const fInicio = new Date(fechaInicio);
                         if (fechaMov < fInicio) cumpleFecha = false;
@@ -201,7 +193,7 @@ export default class Cl_vBanco extends Cl_vGeneral {
         const filtroCategoria = document.getElementById("filtro_categoria") as HTMLSelectElement;
         if (!filtroCategoria) return;
         
-        // Guardar selección actual si existe
+
         const seleccionActual = filtroCategoria.value;
 
         filtroCategoria.innerHTML = "";
@@ -217,7 +209,7 @@ export default class Cl_vBanco extends Cl_vGeneral {
             filtroCategoria.appendChild(option);
         });
 
-        // Restaurar selección si aún existe en las nuevas opciones
+
         if (seleccionActual) {
             filtroCategoria.value = seleccionActual;
         }

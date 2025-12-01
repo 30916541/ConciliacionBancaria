@@ -108,7 +108,9 @@ export default class Cl_mMovimiento extends Cl_mTablaWeb{
     }
 
     get referenciaOK(): boolean {
-        return this._referencia.length === 13;
+        const regex = /^[A-Za-z]{3}-\d{3}$/;
+        this._referencia = this._referencia.toUpperCase();
+        return regex.test(this._referencia);
     } 
 
     get tipoOK(): boolean {

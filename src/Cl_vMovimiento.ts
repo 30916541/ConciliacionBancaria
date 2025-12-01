@@ -13,7 +13,7 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
     private _lblTipoMovimiento: HTMLElement;
     private _tipoMovimiento: string = "";
     private _movimientoId: number | null = null;
-    private _desdeConciliacion: boolean = false; // Nuevo atributo
+    private _desdeConciliacion: boolean = false;
 
     constructor(controlador: Cl_controlador) {
         super({ formName: "movimientoForm" });
@@ -46,12 +46,11 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
         this._inCategoria.value = "";
         this._inDescripcion.value = "";
         this._inMonto.value = "";
-        this._desdeConciliacion = false; // Resetear flag
+        this._desdeConciliacion = false;
         
         this._btRegistrar.classList.remove("hidden");
         this._btActualizar.classList.add("hidden");
-        this._inReferencia.disabled = false; // Allow editing reference only on create? Usually ID is locked, reference might be editable but it's the key in some systems. Let's assume editable for now or locked if it's the key. The model uses reference as alias? No, ID is ID.
-        // In Cl_mBanco, editRecord uses object. The ID is in the object.
+        this._inReferencia.disabled = false;
     }
 
     cargarFormulario(movimiento: any) {
@@ -64,12 +63,12 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
         this._inDescripcion.value = movimiento.descripcion;
         this._inMonto.value = movimiento.monto;
         this._movimientoId = movimiento.id;
-        this._desdeConciliacion = false; // No viene de conciliación
+        this._desdeConciliacion = false;
 
         this._btRegistrar.classList.add("hidden");
         this._btActualizar.classList.remove("hidden");
         
-        // Re-asignar el evento onclick para asegurar que funcione
+
         this._btActualizar.onclick = () => this.actualizar();
     }
 
@@ -90,7 +89,7 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
             tipo: this._tipoMovimiento
         };
         
-        // Usar método especial si viene de conciliación
+
         if (this._desdeConciliacion) {
             this.controlador?.agregarMovimientoDesdeConciliacion(movimiento);
         } else {
@@ -100,7 +99,7 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
 
     actualizar() {
         console.log("Botón actualizar presionado");
-        // alert("Botón actualizar presionado"); // Descomentar si es necesario para depurar
+
 
         const movimiento = {
             id: this._movimientoId,
@@ -143,10 +142,10 @@ export default class Cl_vMovimiento extends Cl_vGeneral {
         this._inDescripcion.value = movimiento.descripcion || "";
         this._inMonto.value = movimiento.monto || "";
         
-        // Establecer flag si viene de conciliación
+
         this._desdeConciliacion = movimiento.desdeConciliacion || false;
         
-        // Asegurar que estamos en modo registrar
+
         this._btRegistrar.classList.remove("hidden");
         this._btActualizar.classList.add("hidden");
     }

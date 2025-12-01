@@ -21,8 +21,6 @@ export default class Cl_mBanco {
         this.saldoTotal = 0;
     }
 
-
-
     addMovimiento({
         dtmovimiento,
         callback,
@@ -153,4 +151,3 @@ export default class Cl_mBanco {
         return this.categorias.map((categoria) => categoria.toJSON());
     }
 }
-    

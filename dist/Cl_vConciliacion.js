@@ -51,13 +51,10 @@ export default class Cl_vConciliacion extends Cl_vGeneral {
                     ${res.estado !== "Conciliado" ? `<button class="conciliar">Conciliar</button>` : ""}
                 </td>
             `;
-            // Si queremos agregar funcionalidad al botón conciliar manual, podemos hacerlo aquí
             if (res.estado !== "Conciliado") {
                 const btnConciliar = row.querySelector(".conciliar");
                 if (btnConciliar) {
                     btnConciliar.onclick = () => {
-                        // Lógica para conciliación manual o registrar el movimiento faltante
-                        // Por ahora, quizás solo mostrar un mensaje o abrir el formulario de registro con datos precargados
                         Swal.fire({
                             title: '¿Desea registrar este movimiento?',
                             text: "Se abrirá el formulario de registro con los datos precargados.",

@@ -12,7 +12,7 @@ export default class Cl_controlador {
 
     private vMovimiento: Cl_vMovimiento;
     private vConciliacion: Cl_vConciliacion;
-    private resultadosConciliacion: any[] = []; // Almacenar resultados de conciliación
+    private resultadosConciliacion: any[] = [];
     
     constructor(modelo: Cl_mBanco, vista: Cl_vBanco) {
         this.modelo = modelo;
@@ -105,7 +105,7 @@ export default class Cl_controlador {
     eliminarMovimiento(movimiento: any) {
         Swal.fire({
             title: '¿Está seguro?',
-            text: `¿Desea eliminar el movimiento con referencia ${movimiento.referencia}?`,
+            text: `¿Desea eliminar el movimiento ${movimiento.descripcion} con la referencia ${movimiento.referencia}?`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -132,15 +132,13 @@ export default class Cl_controlador {
         const movimientosSistema = this.modelo.listarMovimientos();
         const resultados: any[] = [];
 
-        // Normalizar datos del banco (asumiendo estructura del JSON)
-        // Ejemplo JSON: [{"fecha": "2023-10-27", "referencia": "123", "monto": 100.00, "descripcion": "Pago"}]
+
         
         datosBanco.forEach(movBanco => {
-            // Buscar coincidencia en el sistema
-            // Criterio simple: Referencia y Monto coinciden
+
             const coincidencia = movimientosSistema.find(movSis => 
                 movSis.referencia === movBanco.referencia && 
-                Math.abs(movSis.monto - Math.abs(movBanco.monto)) < 0.01 // Comparación de flotantes
+                Math.abs(movSis.monto - Math.abs(movBanco.monto)) < 0.01
             );
 
             if (coincidencia) {
@@ -164,7 +162,7 @@ export default class Cl_controlador {
             }
         });
 
-        // Guardar resultados para poder actualizarlos después
+
         this.resultadosConciliacion = resultados;
         this.vConciliacion.llenarTablaConciliacion(resultados);
     }
@@ -179,10 +177,10 @@ export default class Cl_controlador {
                     this.vista.actualizarSaldo(this.modelo.SaldoActual());
                     this.vMovimiento.ocultarFormulario();
                     
-                    // Actualizar la tabla de conciliación
+
                     this.actualizarTablaConciliacion(movimiento.referencia);
                     
-                    // Regresar a la vista de conciliación
+
                     this.mostrarConciliacion();
                 }
             }
@@ -190,20 +188,19 @@ export default class Cl_controlador {
     }
 
     actualizarTablaConciliacion(referencia: string) {
-        // Buscar el movimiento en los resultados y actualizar su estado
+
         const resultado = this.resultadosConciliacion.find(r => r.referencia === referencia);
         if (resultado) {
             resultado.estado = "Conciliado";
             resultado.categoria = this.modelo.listarMovimientos().find(m => m.referencia === referencia)?.categoria || resultado.categoria;
         }
         
-        // Volver a llenar la tabla con los resultados actualizados
+
         this.vConciliacion.llenarTablaConciliacion(this.resultadosConciliacion);
     }
 
     prepararConciliacionManual(movimientoBanco: any) {
-        // Determinar tipo basado en el monto o signo si viene del banco
-        // Si el JSON tiene 'tipo', usarlo. Si no, inferir.
+
         let tipo = "Abono";
         if (movimientoBanco.monto < 0 || movimientoBanco.tipo === "Cargo") {
             tipo = "Cargo";
@@ -211,16 +208,16 @@ export default class Cl_controlador {
 
         this.mostrarRegistrarMovimiento(tipo);
         
-        // Pre-llenar el formulario con la categoría del banco
+
         const dummyMov = {
             tipo: tipo,
             fechaHora: movimientoBanco.fechaHora,
             referencia: movimientoBanco.referencia,
-            categoria: movimientoBanco.categoria || "", // Usar la categoría del banco
+            categoria: movimientoBanco.categoria || "",
             descripcion: movimientoBanco.descripcion || "Conciliación manual",
             monto: Math.abs(movimientoBanco.monto),
             id: null,
-            desdeConciliacion: true // Marcar que viene de conciliación
+            desdeConciliacion: true
         };
         this.vMovimiento.prellenarFormulario(dummyMov);
     }
