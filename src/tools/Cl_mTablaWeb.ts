@@ -1,5 +1,5 @@
 export default class Cl_mTablaWeb {
-  private _id: number | null;
+  public _id: number | null;
   private _creadoEl: string | null;
   private _alias: string | null;
   constructor({
@@ -14,6 +14,9 @@ export default class Cl_mTablaWeb {
     this._id = id ?? null;
     this._creadoEl = creadoEl ?? null;
     this._alias = alias ?? null;
+  }
+  set id(id: number | null) {
+    this._id = id;
   }
   get id(): number | null {
     return this._id;
