@@ -33,7 +33,7 @@ El **Sistema de Conciliación Bancaria** es una aplicación web desarrollada en 
 
 ---
 
-## 🏗️ Arquitectura del Sistema
+## 🏗️ Arquitectura del Sistema.
 
 El proyecto sigue el patrón de diseño **MVC (Modelo-Vista-Controlador)** con una clara separación de responsabilidades:
 
