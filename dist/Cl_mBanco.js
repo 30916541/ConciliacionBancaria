@@ -1,93 +1,18 @@
 import Cl_dcytDb from "https://gtplus.net/forms2/dcytDb/api/Cl_dcytDb.php?v251110-2150";
 import Cl_mCategoria from "./Cl_mCategoria.js";
+import { categoriasData } from "./_data.js";
 import Cl_mMovimiento from "./Cl_mMovimiento.js";
 export default class Cl_mBanco {
     db;
     movimientos = [];
     categorias = [];
     saldoTotal = 0;
-    tbCategorias = "Categorias_Prueba.V1";
     tbMovimientos = "Movimiento_Prueba.V1";
     constructor() {
         this.db = new Cl_dcytDb({ aliasCuenta: "THEGITGUARDIANS" });
         this.movimientos = [];
         this.categorias = [];
         this.saldoTotal = 0;
-    }
-    addCategoria({ dtcategoria, callback, }) {
-        let categoria = new Cl_mCategoria(dtcategoria);
-        if (this.categorias.find((n) => n.nombre === categoria.nombre))
-            callback(`La categoria ${dtcategoria.nombre} ya existe.`);
-        else if (!categoria.categoriaOK)
-            callback(categoria.categoriaOK);
-        else
-            this.db.addRecord({
-                tabla: this.tbCategorias,
-                registroAlias: dtcategoria.nombre,
-                object: categoria,
-                callback: (result) => {
-                    if (!result) {
-                        callback("Error del servidor: La respuesta es nula.");
-                        return;
-                    }
-                    const { id, objects: categorias, error } = result;
-                    if (!error)
-                        this.llenarCategorias(categorias || []);
-                    callback?.(error);
-                },
-            });
-    }
-    editCategoria({ dtcategoria, callback, }) {
-        let categoria = new Cl_mCategoria(dtcategoria);
-        if (!categoria.categoriaOK)
-            callback(categoria.categoriaOK);
-        else
-            this.db.editRecord({
-                tabla: this.tbCategorias,
-                object: categoria,
-                callback: (result) => {
-                    if (!result) {
-                        callback("Error del servidor: La respuesta es nula.");
-                        return;
-                    }
-                    const { objects: categorias, error } = result;
-                    if (!error)
-                        this.llenarCategorias(categorias || []);
-                    callback?.(error);
-                },
-            });
-    }
-    deleteCategoria({ nombre, callback, }) {
-        let indice = this.categorias.findIndex((n) => n.nombre === nombre);
-        if (indice === -1)
-            callback(`La categoria ${nombre} no existe.`);
-        else {
-            const categoria = this.categorias[indice];
-            if (!categoria) {
-                callback(`La categoria ${nombre} no existe.`);
-                return;
-            }
-            let algunMovimiento = false;
-            for (let movimiento of this.movimientos) {
-                if (movimiento.categoria === nombre) {
-                    algunMovimiento = true;
-                    break;
-                }
-            }
-            if (algunMovimiento)
-                callback(`La categoria ${nombre} tiene movimientos asociados.`);
-            else {
-                this.db.deleteRecord({
-                    tabla: this.tbCategorias,
-                    object: categoria,
-                    callback: ({ objects: categorias, error }) => {
-                        if (!error)
-                            this.llenarCategorias(categorias || []);
-                        callback?.(error);
-                    },
-                });
-            }
-        }
     }
     addMovimiento({ dtmovimiento, callback, }) {
         let movimiento = new Cl_mMovimiento(dtmovimiento);
@@ -165,15 +90,8 @@ export default class Cl_mBanco {
             callback: ({ objects, error }) => {
                 if (!error)
                     this.llenarMovimientos(objects || []);
-                // Cargar categorías también
-                this.db.listRecords({
-                    tabla: this.tbCategorias,
-                    callback: ({ objects: categorias, error: errorCat }) => {
-                        if (!errorCat)
-                            this.llenarCategorias(categorias || []);
-                        callback(error || errorCat);
-                    }
-                });
+                this.llenarCategorias(categoriasData);
+                callback(error);
             },
         });
     }

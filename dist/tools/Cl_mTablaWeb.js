@@ -7,6 +7,9 @@ export default class Cl_mTablaWeb {
         this._creadoEl = creadoEl ?? null;
         this._alias = alias ?? null;
     }
+    set id(id) {
+        this._id = id;
+    }
     get id() {
         return this._id;
     }

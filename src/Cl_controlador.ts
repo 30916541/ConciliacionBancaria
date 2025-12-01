@@ -1,6 +1,6 @@
 import Cl_mBanco from "./Cl_mBanco.js";
 import Cl_vBanco from "./Cl_vBanco.js";
-import Cl_vCategoria from "./Cl_vCategoria.js";
+
 import Cl_vMovimiento from "./Cl_vMovimiento.js";
 import Cl_vConciliacion from "./Cl_vConciliacion.js";
 
@@ -9,7 +9,7 @@ declare const Swal: any;
 export default class Cl_controlador {
     private modelo: Cl_mBanco;
     private vista: Cl_vBanco;
-    private vCategoria: Cl_vCategoria;
+
     private vMovimiento: Cl_vMovimiento;
     private vConciliacion: Cl_vConciliacion;
     private resultadosConciliacion: any[] = []; // Almacenar resultados de conciliación
@@ -17,7 +17,7 @@ export default class Cl_controlador {
     constructor(modelo: Cl_mBanco, vista: Cl_vBanco) {
         this.modelo = modelo;
         this.vista = vista;
-        this.vCategoria = new Cl_vCategoria(this);
+
         this.vMovimiento = new Cl_vMovimiento(this);
         this.vConciliacion = new Cl_vConciliacion(this);
     }
@@ -28,10 +28,7 @@ export default class Cl_controlador {
         this.vMovimiento.prepararFormulario(tipo);
     }
     
-    mostrarCategorias() {
-        this.vista.mostrarCategorias();
-        this.vCategoria.llenarTablaCategorias(this.modelo.listarCategorias());
-    }
+
     
     mostrarConciliacion() {
         this.vista.mostrarConciliacion();
@@ -62,60 +59,7 @@ export default class Cl_controlador {
         });
     }
 
-    agregarCategoria(categoria: any) {
-        this.modelo.addCategoria({
-            dtcategoria: categoria,
-            callback: (error) => {
-                if (error) Swal.fire('Error', error, 'error');
-                else {
-                    Swal.fire('Éxito', 'Categoría registrada correctamente', 'success');
-                    this.mostrarCategorias();
-                }
-            }
-        });
-    }
 
-    editarCategoria(categoria: any) {
-        this.vCategoria.cargarFormulario(categoria);
-    }
-
-    actualizarCategoria(categoria: any) {
-        this.modelo.editCategoria({
-            dtcategoria: categoria,
-            callback: (error) => {
-                if (error) Swal.fire('Error', error, 'error');
-                else {
-                    Swal.fire('Éxito', 'Categoría actualizada correctamente', 'success');
-                    this.mostrarCategorias();
-                }
-            }
-        });
-    }
-
-    eliminarCategoria(categoria: any) {
-        Swal.fire({
-            title: '¿Está seguro?',
-            text: `¿Desea eliminar la categoría ${categoria.nombre}?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, eliminar'
-        }).then((result: any) => {
-            if (result.isConfirmed) {
-                this.modelo.deleteCategoria({
-                    nombre: categoria.nombre,
-                    callback: (error) => {
-                        if(error) Swal.fire('Error', error, 'error');
-                        else {
-                            Swal.fire('Eliminado!', 'La categoría ha sido eliminada.', 'success');
-                            this.mostrarCategorias();
-                        }
-                    }
-                });
-            }
-        });
-    }
 
     verMovimiento(movimiento: any) {
         this.vista.mostrarDetalle();

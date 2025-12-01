@@ -2,7 +2,6 @@ import Cl_vGeneral from "./tools/Cl_vGeneral.js";
 export default class Cl_vBanco extends Cl_vGeneral {
     _btAgregarAbono;
     _btAgregarCargo;
-    _btAjustes;
     _btConciliar;
     _btVerMovimientos;
     _lblSaldoTotal;
@@ -10,7 +9,6 @@ export default class Cl_vBanco extends Cl_vGeneral {
     _secOperaciones;
     _secSaldoTotal;
     _secTablaMovimientos;
-    _secVistaCategorias;
     _secVistaConciliacion;
     _secVistaDetalle;
     _divAgregarMovimiento;
@@ -21,7 +19,6 @@ export default class Cl_vBanco extends Cl_vGeneral {
         this._btAgregarAbono = document.getElementById("agregarMovimiento_btAgregarAbono");
         this._btAgregarCargo = document.getElementById("agregarMovimiento_btAgregarCargo");
         this._divAgregarMovimiento = document.getElementById("agregarMovimiento");
-        this._btAjustes = document.getElementById("agregarMovimiento_btAjustes");
         this._btConciliar = document.getElementById("agregarMovimiento_btConciliar");
         this._btVerMovimientos = document.getElementById("saldoTotal_btnVerMovimientos");
         this._lblSaldoTotal = document.getElementById("saldoTotal_pSaldoTotal");
@@ -33,12 +30,10 @@ export default class Cl_vBanco extends Cl_vGeneral {
         this._secOperaciones = document.getElementById("operaciones");
         this._secSaldoTotal = document.getElementById("saldoTotal");
         this._secTablaMovimientos = document.getElementById("tablaMovimientos");
-        this._secVistaCategorias = document.getElementById("vistaCategorias");
         this._secVistaConciliacion = document.getElementById("vistaConciliacion");
         this._secVistaDetalle = document.getElementById("vistaDetalle");
         this._btAgregarAbono.onclick = () => this.controlador?.mostrarRegistrarMovimiento("Abono");
         this._btAgregarCargo.onclick = () => this.controlador?.mostrarRegistrarMovimiento("Cargo");
-        this._btAjustes.onclick = () => this.controlador?.mostrarCategorias();
         this._btConciliar.onclick = () => this.controlador?.mostrarConciliacion();
         this._btVerMovimientos.onclick = () => this.controlador?.mostrarTablaMovimientos();
         if (btRegresarTablaMovimientos)
@@ -67,10 +62,6 @@ export default class Cl_vBanco extends Cl_vGeneral {
         this.ocultarTodo();
         this._secMovimientoBancarios.style.display = "block";
         this._divAgregarMovimiento.style.display = "none";
-    }
-    mostrarCategorias() {
-        this.ocultarTodo();
-        this._secVistaCategorias.style.display = "block";
     }
     mostrarConciliacion() {
         this.ocultarTodo();
@@ -101,8 +92,6 @@ export default class Cl_vBanco extends Cl_vGeneral {
             this._secSaldoTotal.style.display = "none";
         if (this._secTablaMovimientos)
             this._secTablaMovimientos.style.display = "none";
-        if (this._secVistaCategorias)
-            this._secVistaCategorias.style.display = "none";
         if (this._secVistaConciliacion)
             this._secVistaConciliacion.style.display = "none";
         if (this._secVistaDetalle)
