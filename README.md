@@ -64,12 +64,9 @@ El proyecto sigue el patrón de diseño **MVC (Modelo-Vista-Controlador)** con u
                      ▼
 ┌─────────────────────────────────────────────────────────┐
 │                  MODELOS (Model)                         │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │  Cl_mBanco   │  │Cl_mMovimiento│  │Cl_mCategoria │  │
-│  └──────────────┘  └──────────────┘  └──────────────┘  │
-│  ┌──────────────┐  ┌──────────────┐                    │
-│  │  Cl_mAbono   │  │  Cl_mCargo   │                    │
-│  └──────────────┘  └──────────────┘                    │
+│  ┌──────────────┐                    │
+│  │Cl_mMovimiento│                    │
+│  └──────────────┘                    │
 └────────────────────┬────────────────────────────────────┘
                      │
                      ▼
@@ -101,9 +98,7 @@ Conciliacion Bancaria/
 │   │
 │   ├── Modelos/
 │   │   ├── Cl_mBanco.ts         # Modelo principal del banco
-│   │   ├── Cl_mMovimiento.ts    # Modelo base de movimientos
-│   │   ├── Cl_mAbono.ts         # Modelo de abonos (hereda de Movimiento)
-│   │   ├── Cl_mCargo.ts         # Modelo de cargos (hereda de Movimiento)
+│   │   ├── Cl_mMovimiento.ts    # Modelo de movimientos (Abonos y Cargos)
 │   │   └── Cl_mCategoria.ts     # Modelo de categorías
 │   │
 │   ├── Vistas/
@@ -163,7 +158,7 @@ Conciliacion Bancaria/
 | `listarCategorias()` | Retorna todas las categorías | - | iCategoria[] |
 
 **Funcionalidad Detallada**:
-- **addMovimiento**: Valida el movimiento, lo inserta en BD, crea instancia de Abono/Cargo según tipo, actualiza saldo y arrays
+- **addMovimiento**: Valida el movimiento, lo inserta en BD, crea instancia de Movimiento, actualiza saldo y arrays
 - **editMovimiento**: Busca el movimiento por ID, revierte el saldo anterior, actualiza en BD, aplica nuevo saldo
 - **deleteMovimiento**: Elimina de BD, revierte el saldo, actualiza arrays
 - **procesarMovimientos**: Suma o resta del saldo según sea Abono (+) o Cargo (-)
@@ -171,7 +166,7 @@ Conciliacion Bancaria/
 ---
 
 #### 2. `Cl_mMovimiento`
-**Descripción**: Clase base abstracta para todos los movimientos bancarios.
+**Descripción**: Clase que representa todos los movimientos bancarios (Abonos y Cargos).
 
 **Atributos**:
 - `private _fechaHora: string` - Fecha y hora del movimiento
@@ -191,7 +186,7 @@ Conciliacion Bancaria/
 | `descripcion(value)` / `descripcion()` | Setter/Getter de descripción | string |
 | `monto(value)` / `monto()` | Setter/Getter de monto | number |
 | `tipo(value)` / `tipo()` | Setter/Getter de tipo | string |
-| `montoOperacion()` | Retorna el monto para operaciones | number |
+| `montoOperacion()` | Retorna el monto positivo para Abonos y negativo para Cargos | number |
 | `referenciaOK` | Valida que referencia tenga 13 caracteres | boolean |
 | `montoOK` | Valida que monto sea mayor a 0 | boolean |
 | `movimientoOK` | Valida todo el movimiento | string \| true |
@@ -199,23 +194,7 @@ Conciliacion Bancaria/
 
 ---
 
-#### 3. `Cl_mAbono`
-**Descripción**: Representa un abono (ingreso de dinero). Hereda de `Cl_mMovimiento`.
 
-**Métodos Sobrescritos**:
-- `montoOperacion()`: Retorna el monto positivo (suma al saldo)
-- `constructor()`: Establece automáticamente `tipo = "Abono"`
-
----
-
-#### 4. `Cl_mCargo`
-**Descripción**: Representa un cargo (egreso de dinero). Hereda de `Cl_mMovimiento`.
-
-**Métodos Sobrescritos**:
-- `montoOperacion()`: Retorna el monto negativo (resta del saldo)
-- `constructor()`: Establece automáticamente `tipo = "Cargo"`
-
----
 
 #### 5. `Cl_mCategoria`
 **Descripción**: Modelo para categorías de movimientos.
