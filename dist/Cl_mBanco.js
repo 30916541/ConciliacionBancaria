@@ -1,8 +1,6 @@
 import Cl_dcytDb from "https://gtplus.net/forms2/dcytDb/api/Cl_dcytDb.php?v251110-2150";
 import Cl_mCategoria from "./Cl_mCategoria.js";
 import Cl_mMovimiento from "./Cl_mMovimiento.js";
-import Cl_mAbono from "./Cl_mAbono.js";
-import Cl_mCargo from "./Cl_mCargo.js";
 export default class Cl_mBanco {
     db;
     movimientos = [];
@@ -92,17 +90,7 @@ export default class Cl_mBanco {
         }
     }
     addMovimiento({ dtmovimiento, callback, }) {
-        let movimiento;
-        if (dtmovimiento.tipo === "Abono") {
-            movimiento = new Cl_mAbono(dtmovimiento);
-        }
-        else if (dtmovimiento.tipo === "Cargo") {
-            movimiento = new Cl_mCargo(dtmovimiento);
-        }
-        else {
-            callback("Tipo de movimiento no válido.");
-            return;
-        }
+        let movimiento = new Cl_mMovimiento(dtmovimiento);
         if (movimiento.movimientoOK !== true)
             callback(movimiento.movimientoOK);
         else {
@@ -119,49 +107,30 @@ export default class Cl_mBanco {
         }
     }
     editMovimiento({ dtmovimiento, callback, }) {
-        let movimiento;
-        if (dtmovimiento.tipo === "Abono") {
-            movimiento = new Cl_mAbono(dtmovimiento);
-        }
-        else if (dtmovimiento.tipo === "Cargo") {
-            movimiento = new Cl_mCargo(dtmovimiento);
-        }
-        else {
-            movimiento = new Cl_mMovimiento(dtmovimiento);
-        }
         if (!dtmovimiento.id) {
             callback("ID del movimiento no encontrado.");
             return;
         }
-        if (movimiento.movimientoOK !== true)
-            callback(movimiento.movimientoOK);
-        else {
-            const objToSend = {
-                id: movimiento.id,
-                fechaHora: movimiento.fechaHora,
-                referencia: movimiento.referencia,
-                categoria: movimiento.categoria,
-                descripcion: movimiento.descripcion,
-                monto: movimiento.monto,
-                tipo: movimiento.tipo
-            };
-            console.log("Enviando a editRecord (limpio):", objToSend);
-            this.db.editRecord({
-                tabla: this.tbMovimientos,
-                object: objToSend,
-                callback: (result) => {
-                    if (!result) {
-                        console.error("Respuesta nula de editRecord");
-                        callback("Error del servidor: La respuesta es nula.");
-                        return;
-                    }
-                    const { objects: movimientos, error } = result;
-                    if (!error)
-                        this.llenarMovimientos(movimientos || []);
-                    callback?.(error);
-                },
-            });
+        let movimiento = new Cl_mMovimiento(dtmovimiento);
+        const validacion = movimiento.movimientoOK;
+        if (validacion !== true) {
+            callback(validacion);
+            return;
         }
+        this.db.editRecord({
+            tabla: this.tbMovimientos,
+            object: movimiento,
+            callback: (result) => {
+                if (!result) {
+                    callback("Error del servidor: La respuesta es nula.");
+                    return;
+                }
+                const { objects: movimientos, error } = result;
+                if (!error)
+                    this.llenarMovimientos(movimientos || []);
+                callback?.(error);
+            },
+        });
     }
     deleteMovimiento({ dtmovimiento, callback, }) {
         let indice = this.movimientos.findIndex((movimiento) => movimiento.referencia === dtmovimiento.referencia);
@@ -185,12 +154,7 @@ export default class Cl_mBanco {
         }
     }
     procesarMovimientos(movimiento) {
-        if (movimiento instanceof Cl_mAbono) {
-            this.saldoTotal += movimiento.montoOperacion();
-        }
-        else if (movimiento instanceof Cl_mCargo) {
-            this.saldoTotal += movimiento.montoOperacion(); // montoOperacion is negative for Cargo
-        }
+        this.saldoTotal += movimiento.montoOperacion();
     }
     SaldoActual() {
         return this.saldoTotal;
@@ -223,16 +187,7 @@ export default class Cl_mBanco {
         this.movimientos = [];
         this.saldoTotal = 0;
         movimientos.forEach((movimiento) => {
-            let mov;
-            if (movimiento.tipo === "Abono") {
-                mov = new Cl_mAbono(movimiento);
-            }
-            else if (movimiento.tipo === "Cargo") {
-                mov = new Cl_mCargo(movimiento);
-            }
-            else {
-                mov = new Cl_mMovimiento(movimiento);
-            }
+            let mov = new Cl_mMovimiento(movimiento);
             this.movimientos.push(mov);
             this.procesarMovimientos(mov);
         });

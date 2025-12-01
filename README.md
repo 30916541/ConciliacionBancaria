@@ -273,7 +273,7 @@ Conciliacion Bancaria/
 **Atributos**:
 - Inputs: `_inFechaHora`, `_inReferencia`, `_inCategoria`, `_inDescripcion`, `_inMonto`
 - Botones: `_btRegistrar`, `_btActualizar`, `_btCancelar`
-- Otros: `_lblTipoMovimiento`, `_tipoMovimiento`, `_movimientoId`
+- Otros: `_lblTipoMovimiento`, `_tipoMovimiento`, `_movimientoId`, `_desdeConciliacion`
 
 **Métodos**:
 
@@ -282,10 +282,10 @@ Conciliacion Bancaria/
 | `prepararFormulario()` | Prepara formulario para nuevo movimiento | Limpia campos, establece tipo, muestra botón registrar |
 | `cargarFormulario()` | Carga datos para editar | Llena campos con datos existentes, muestra botón actualizar |
 | `ocultarFormulario()` | Oculta el formulario | Establece display:none |
-| `registrar()` | Registra nuevo movimiento | Recopila datos, llama a `agregarMovimiento()` del controlador |
+| `registrar()` | Registra nuevo movimiento | Detecta si viene de conciliación y usa método apropiado |
 | `actualizar()` | Actualiza movimiento existente | Recopila datos con ID, llama a `actualizarMovimiento()` |
 | `llenarCategorias()` | Llena select de categorías | Crea opciones dinámicamente desde array |
-| `prellenarFormulario()` | Precarga datos para conciliación | Llena campos pero mantiene modo registro |
+| `prellenarFormulario()` | Precarga datos para conciliación | Llena campos incluyendo categoría, establece flag de conciliación |
 
 ---
 
@@ -327,11 +327,11 @@ Conciliacion Bancaria/
 | Método | Descripción | Funcionalidad |
 |--------|-------------|---------------|
 | `procesarArchivo()` | Lee archivo JSON | Usa FileReader, parsea JSON, llama a `realizarConciliacion()` |
-| `llenarTablaConciliacion()` | Muestra resultados | Crea filas con estados (Coincide/No coincide), botón conciliar manual |
+| `llenarTablaConciliacion()` | Muestra resultados | Crea filas con estados, botón conciliar manual, actualiza automáticamente |
 
 **Estados de Conciliación**:
-- ✅ **Coincide**: Movimiento encontrado en ambos sistemas
-- ⚠️ **No coincide**: Movimiento solo en estado de cuenta bancario
+- ✅ **Conciliado** (verde): Movimiento encontrado en ambos sistemas
+- ❌ **No Conciliado** (rojo): Movimiento solo en estado de cuenta bancario
 
 ---
 
@@ -346,6 +346,7 @@ Conciliacion Bancaria/
 - `private vCategoria: Cl_vCategoria` - Vista de categorías
 - `private vMovimiento: Cl_vMovimiento` - Vista de movimientos
 - `private vConciliacion: Cl_vConciliacion` - Vista de conciliación
+- `private resultadosConciliacion: any[]` - Almacena resultados de conciliación para actualización automática
 
 **Métodos de Navegación**:
 
@@ -362,6 +363,7 @@ Conciliacion Bancaria/
 | Método | Descripción | Funcionalidad |
 |--------|-------------|---------------|
 | `agregarMovimiento()` | Agrega nuevo movimiento | Llama a modelo, actualiza vista, muestra confirmación |
+| `agregarMovimientoDesdeConciliacion()` | Agrega movimiento desde conciliación | Registra y actualiza tabla de conciliación automáticamente |
 | `editarMovimiento()` | Prepara edición | Carga datos en formulario de vista |
 | `actualizarMovimiento()` | Actualiza movimiento | Llama a modelo, actualiza vista |
 | `eliminarMovimiento()` | Elimina movimiento | Pide confirmación con SweetAlert, llama a modelo |
@@ -380,8 +382,9 @@ Conciliacion Bancaria/
 
 | Método | Descripción | Funcionalidad |
 |--------|-------------|---------------|
-| `realizarConciliacion()` | Concilia movimientos | Compara arrays, identifica coincidencias y diferencias |
-| `prepararConciliacionManual()` | Registra movimiento faltante | Precarga formulario con datos del banco |
+| `realizarConciliacion()` | Concilia movimientos | Compara arrays, guarda resultados, identifica coincidencias |
+| `actualizarTablaConciliacion()` | Actualiza estado en tabla | Cambia estado a "Conciliado" y refresca tabla |
+| `prepararConciliacionManual()` | Prepara registro manual | Precarga formulario con todos los datos incluyendo categoría |
 
 ---
 
@@ -574,7 +577,7 @@ Renderiza tabla con botones de acción
 Botón "Regresar" → Vista principal
 ```
 
-#### 7. **Conciliación Bancaria**
+#### 7. **Conciliación Bancaria** (Mejorado)
 ```
 Usuario hace clic en "Conciliar"
     ↓
@@ -591,21 +594,37 @@ FileReader lee el archivo
 Cl_controlador.realizarConciliacion(datosBanco)
     ↓
 Compara movimientos internos vs. banco:
-  - Coincide: Mismo monto, fecha y referencia
-  - No coincide: Solo existe en banco
+  - Conciliado: Mismo monto y referencia
+  - No Conciliado: Solo existe en banco
+    ↓
+Guarda resultados en controlador
     ↓
 Cl_vConciliacion.llenarTablaConciliacion(resultados)
     ↓
-Para movimientos "No coincide":
+Para movimientos "No Conciliado":
   Usuario hace clic en "Conciliar"
     ↓
   SweetAlert: Confirmación
     ↓
   Cl_controlador.prepararConciliacionManual()
     ↓
-  Cl_vMovimiento.prellenarFormulario(datos)
+  Cl_vMovimiento.prellenarFormulario(datos) [CON CATEGORÍA]
     ↓
-  Usuario confirma y registra
+  Usuario confirma y hace clic en "Registrar"
+    ↓
+  Cl_vMovimiento.registrar() detecta flag de conciliación
+    ↓
+  Cl_controlador.agregarMovimientoDesdeConciliacion()
+    ↓
+  Registra en BD y actualiza saldo
+    ↓
+  Cl_controlador.actualizarTablaConciliacion()
+    ↓
+  Cambia estado a "Conciliado" en la tabla
+    ↓
+  Regresa automáticamente a vista de conciliación
+    ↓
+  Tabla muestra el movimiento como "Conciliado" ✅
 ```
 
 ### Estados de las Vistas
@@ -653,10 +672,13 @@ Para movimientos "No coincide":
 
 ### 5. **Conciliación Bancaria**
 - ✅ Carga de estado de cuenta (JSON)
-- ✅ Comparación automática
+- ✅ Comparación automática por referencia y monto
 - ✅ Identificación de coincidencias
 - ✅ Detección de movimientos faltantes
-- ✅ Registro manual de faltantes
+- ✅ Registro manual de faltantes con datos precargados
+- ✅ Actualización automática de tabla después de registrar
+- ✅ Estados visuales: "Conciliado" (verde) y "No Conciliado" (rojo)
+- ✅ Precarga automática de categoría desde archivo bancario
 
 ### 6. **Interfaz de Usuario**
 - ✅ Diseño responsive (móvil, tablet, desktop)
@@ -714,8 +736,15 @@ Para movimientos "No coincide":
 2. Haga clic en **"Conciliar"**
 3. Seleccione el archivo JSON
 4. Haga clic en **"Conciliar"**
-5. Revise los resultados
-6. Para movimientos no coincidentes, haga clic en **"Conciliar"** para registrarlos
+5. Revise los resultados:
+   - ✅ **Conciliado** (verde): El movimiento ya existe en el sistema
+   - ❌ **No Conciliado** (rojo): El movimiento solo está en el banco
+6. Para movimientos **No Conciliados**:
+   - Haga clic en el botón **"Conciliar"**
+   - Confirme en el diálogo
+   - El formulario se abrirá con TODOS los datos precargados (incluyendo categoría)
+   - Verifique los datos y haga clic en **"Registrar"**
+   - La tabla se actualizará automáticamente mostrando el estado como **"Conciliado"** ✅
 
 ### Filtrar Movimientos
 

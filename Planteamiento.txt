@@ -8,17 +8,10 @@ Clase Menor: Movimiento
 Atributos:
 Fecha y Hora
 Referencia
+Tipo
 Categoria
 Descripcion
 Monto
-
-Clase Heredada: Abono
-Hereda Atributos de la Clase Moviemiento
-Metodo: Suma al saldo total
-
-Clase Heredada: Cargo
-Hereda Atributos de la Clase Moviemiento
-Metodo: Resta al saldo total
 
 Clase Mayor: Banco
 Atributos: 
