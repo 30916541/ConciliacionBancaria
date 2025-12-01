@@ -46,8 +46,8 @@ El proyecto sigue el patrón de diseño **MVC (Modelo-Vista-Controlador)** con u
 ┌─────────────────────────────────────────────────────────┐
 │                   VISTAS (View)                          │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │  Cl_vBanco   │  │Cl_vMovimiento│  │Cl_vCategoria │  │
-│  └──────────────┘  └──────────────┘  └──────────────┘  │
+│  │  Cl_vBanco   │  │Cl_vMovimiento│                    │
+│  └──────────────┘  └──────────────┘                    │
 │  ┌──────────────┐                                       │
 │  │Cl_vConcilia. │                                       │
 │  └──────────────┘                                       │
@@ -104,7 +104,6 @@ Conciliacion Bancaria/
 │   ├── Vistas/
 │   │   ├── Cl_vBanco.ts         # Vista principal del banco
 │   │   ├── Cl_vMovimiento.ts    # Vista de formulario de movimientos
-│   │   ├── Cl_vCategoria.ts     # Vista de gestión de categorías
 │   │   └── Cl_vConciliacion.ts  # Vista de conciliación bancaria
 │   │
 │   └── tools/
@@ -133,9 +132,8 @@ Conciliacion Bancaria/
 **Atributos**:
 - `private db: Cl_dcytDb` - Instancia de conexión a la base de datos
 - `private movimientos: Cl_mMovimiento[]` - Array de movimientos bancarios
-- `private categorias: Cl_mCategoria[]` - Array de categorías
+- `private categorias: Cl_mCategoria[]` - Array de categorías (cargadas desde `_data.ts`)
 - `private saldoTotal: number` - Saldo total actual
-- `readonly tbCategorias: string` - Nombre de la tabla de categorías
 - `readonly tbMovimientos: string` - Nombre de la tabla de movimientos
 
 **Métodos Principales**:
@@ -143,9 +141,7 @@ Conciliacion Bancaria/
 | Método | Descripción | Parámetros | Retorno |
 |--------|-------------|------------|---------|
 | `constructor()` | Inicializa la conexión a BD y arrays | - | void |
-| `addCategoria()` | Agrega una nueva categoría | `dtcategoria: iCategoria, callback` | void |
-| `editCategoria()` | Edita una categoría existente | `dtcategoria: iCategoria, callback` | void |
-| `deleteCategoria()` | Elimina una categoría | `nombre: string, callback` | void |
+
 | `addMovimiento()` | Agrega un nuevo movimiento | `dtmovimiento: iMovimiento, callback` | void |
 | `editMovimiento()` | Edita un movimiento existente | `dtmovimiento: iMovimiento, callback` | void |
 | `deleteMovimiento()` | Elimina un movimiento | `dtmovimiento: iMovimiento, callback` | void |
@@ -219,7 +215,7 @@ Conciliacion Bancaria/
 **Descripción**: Vista principal que gestiona la interfaz del banco y la navegación entre pantallas.
 
 **Atributos**:
-- Botones: `_btAgregarAbono`, `_btAgregarCargo`, `_btAjustes`, `_btConciliar`, `_btVerMovimientos`
+- Botones: `_btAgregarAbono`, `_btAgregarCargo`, `_btConciliar`, `_btVerMovimientos`
 - Secciones: `_secMovimientoBancarios`, `_secOperaciones`, `_secSaldoTotal`, `_secTablaMovimientos`, etc.
 - Elementos: `_lblSaldoTotal`, `_divAgregarMovimiento`
 
@@ -230,14 +226,13 @@ Conciliacion Bancaria/
 | `constructor()` | Inicializa elementos DOM y eventos | Vincula botones con funciones del controlador |
 | `mostrarVistaPrincipal()` | Muestra la pantalla principal | Oculta todo y muestra secciones principales |
 | `mostrarRegistrarMovimiento()` | Muestra formulario de movimiento | Oculta botones de agregar, muestra formulario |
-| `mostrarCategorias()` | Muestra gestión de categorías | Cambia a vista de categorías |
+
 | `mostrarConciliacion()` | Muestra vista de conciliación | Cambia a vista de conciliación |
 | `mostrarTablaMovimientos()` | Muestra tabla de movimientos | Muestra tabla con filtros |
 | `mostrarDetalle()` | Muestra detalle de un movimiento | Cambia a vista de detalle |
 | `ocultarTodo()` | Oculta todas las secciones | Establece display:none en todas las vistas |
 | `actualizarSaldo()` | Actualiza el saldo mostrado | Formatea y muestra el saldo en Bs |
 | `llenarTablaMovimientos()` | Llena la tabla con movimientos | Aplica filtros, crea filas con botones de acción |
-| `llenarFiltroCategorias()` | Llena el select de filtro de categorías | Crea opciones dinámicamente |
 
 **Funcionalidad de Botones en Tabla**:
 - **Ver** (👁️): Icono de ojo, llama a `verMovimiento()`
@@ -268,30 +263,7 @@ Conciliacion Bancaria/
 
 ---
 
-#### 3. `Cl_vCategoria`
-**Descripción**: Vista para gestionar categorías.
 
-**Atributos**:
-- Input: `_inNombre`
-- Botones: `_btRegistrar`, `_btActualizar`, `_btCancelar`, `_btRegresar`
-- Tabla: `_tablaCategorias`
-- ID: `_categoriaId`
-
-**Métodos**:
-
-| Método | Descripción | Funcionalidad |
-|--------|-------------|---------------|
-| `prepararFormulario()` | Limpia formulario | Resetea campos, muestra botón registrar |
-| `cargarFormulario()` | Carga categoría para editar | Llena nombre, muestra botón actualizar |
-| `registrar()` | Registra nueva categoría | Crea objeto, llama a `agregarCategoria()` |
-| `actualizar()` | Actualiza categoría | Crea objeto con ID, llama a `actualizarCategoria()` |
-| `llenarTablaCategorias()` | Llena tabla de categorías | Crea filas con botones editar y eliminar |
-
-**Botones en Tabla**:
-- **Editar** (✏️): Carga categoría en formulario
-- **Eliminar** (🗑️): Elimina categoría con confirmación
-
----
 
 #### 4. `Cl_vConciliacion`
 **Descripción**: Vista para realizar conciliación bancaria.
@@ -322,7 +294,6 @@ Conciliacion Bancaria/
 **Atributos**:
 - `private modelo: Cl_mBanco` - Referencia al modelo principal
 - `private vista: Cl_vBanco` - Referencia a la vista principal
-- `private vCategoria: Cl_vCategoria` - Vista de categorías
 - `private vMovimiento: Cl_vMovimiento` - Vista de movimientos
 - `private vConciliacion: Cl_vConciliacion` - Vista de conciliación
 - `private resultadosConciliacion: any[]` - Almacena resultados de conciliación para actualización automática
@@ -332,7 +303,7 @@ Conciliacion Bancaria/
 | Método | Descripción |
 |--------|-------------|
 | `mostrarRegistrarMovimiento(tipo)` | Muestra formulario según tipo (Abono/Cargo) |
-| `mostrarCategorias()` | Cambia a vista de categorías |
+
 | `mostrarConciliacion()` | Cambia a vista de conciliación |
 | `mostrarTablaMovimientos()` | Muestra tabla con filtros |
 | `mostrarVistaPrincipal()` | Regresa a pantalla principal |
@@ -348,14 +319,7 @@ Conciliacion Bancaria/
 | `eliminarMovimiento()` | Elimina movimiento | Pide confirmación con SweetAlert, llama a modelo |
 | `verMovimiento()` | Muestra detalle | Llena vista de detalle con datos del movimiento |
 
-**Métodos de Gestión de Categorías**:
 
-| Método | Descripción | Funcionalidad |
-|--------|-------------|---------------|
-| `agregarCategoria()` | Agrega nueva categoría | Llama a modelo, actualiza vistas |
-| `editarCategoria()` | Prepara edición | Carga datos en formulario |
-| `actualizarCategoria()` | Actualiza categoría | Llama a modelo, actualiza vistas |
-| `eliminarCategoria()` | Elimina categoría | Pide confirmación, verifica uso, llama a modelo |
 
 **Métodos de Conciliación**:
 
@@ -390,24 +354,24 @@ Clase base para vistas. Proporciona métodos comunes como `show()`, `hide()`, y 
            ┌───────────────────┼───────────────────┐
            │                   │                   │
            ▼                   ▼                   ▼
-    ┌──────────┐        ┌──────────┐       ┌──────────┐
-    │  ABONO   │        │  CARGO   │       │ AJUSTES  │
-    │  (Form)  │        │  (Form)  │       │(Categoría)│
-    └────┬─────┘        └────┬─────┘       └────┬─────┘
-         │                   │                   │
-         └───────────┬───────┘                   │
-                     │                           │
-                     ▼                           ▼
-          ┌─────────────────┐         ┌─────────────────┐
-          │ REGISTRAR/      │         │ GESTIÓN DE      │
-          │ ACTUALIZAR      │         │ CATEGORÍAS      │
-          │ MOVIMIENTO      │         │                 │
-          └────────┬────────┘         └────────┬────────┘
-                   │                           │
-                   │                           │
-           ┌───────┴────────┐                 │
-           │                │                 │
-           ▼                ▼                 ▼
+    ┌──────────┐        ┌──────────┐
+    │  ABONO   │        │  CARGO   │
+    │  (Form)  │        │  (Form)  │
+    └────┬─────┘        └────┬─────┘
+         │                   │
+         └───────────┬───────┘
+                     │
+                     ▼
+          ┌─────────────────┐
+          │ REGISTRAR/      │
+          │ ACTUALIZAR      │
+          │ MOVIMIENTO      │
+          └────────┬────────┘
+                   │
+                   │
+           ┌───────┴────────┐
+           │                │
+           ▼                ▼
     ┌──────────┐     ┌──────────┐    ┌──────────┐
     │   VER    │     │  TABLA   │    │  EDITAR  │
     │ MOVIMIEN.│     │ MOVIMIEN.│    │ ELIMINAR │
@@ -515,25 +479,7 @@ SweetAlert: Confirmación de eliminación
 Actualiza tabla
 ```
 
-#### 5. **Gestión de Categorías**
-```
-Usuario hace clic en "Ajustes"
-    ↓
-Cl_controlador.mostrarCategorias()
-    ↓
-Cl_vBanco.mostrarCategorias()
-    ↓
-Cl_vCategoria se muestra con tabla de categorías
-    ↓
-Usuario puede:
-  - Registrar nueva categoría
-  - Editar categoría existente (✏️)
-  - Eliminar categoría (🗑️)
-    ↓
-Cada acción sigue flujo similar a movimientos
-    ↓
-Botón "Regresar" → Vista principal
-```
+
 
 #### 6. **Visualización de Movimientos con Filtros**
 ```
@@ -613,7 +559,7 @@ Para movimientos "No Conciliado":
 | **Principal** | Botones Abono/Cargo, Operaciones, Saldo | Formularios, Tablas, Otras vistas |
 | **Formulario Movimiento** | Form de movimiento, Botones Registrar/Cancelar | Vista principal, Botones Abono/Cargo |
 | **Tabla Movimientos** | Tabla, Filtros, Botón Regresar | Vista principal, Formularios |
-| **Gestión Categorías** | Form categoría, Tabla categorías | Vista principal |
+
 | **Conciliación** | Form archivo, Tabla resultados | Vista principal |
 | **Detalle Movimiento** | Información detallada, Botón Regresar | Todo lo demás |
 
@@ -631,9 +577,7 @@ Para movimientos "No Conciliado":
 - ✅ Validación de monto (mayor a 0)
 
 ### 2. **Gestión de Categorías**
-- ✅ Crear categorías personalizadas
-- ✅ Editar nombres de categorías
-- ✅ Eliminar categorías (con validación de uso)
+- ✅ Categorías predefinidas (cargadas desde archivo estático)
 - ✅ Asignación a movimientos
 
 ### 3. **Cálculo de Saldo**
@@ -690,12 +634,7 @@ Para movimientos "No Conciliado":
 4. Modifique los campos necesarios
 5. Haga clic en **"Actualizar"**
 
-### Gestionar Categorías
 
-1. Haga clic en **"Ajustes"**
-2. Para crear: Escriba el nombre y haga clic en **"Registrar"**
-3. Para editar: Haga clic en el icono de **lápiz (✏️)** en la tabla
-4. Para eliminar: Haga clic en el icono de **papelera (🗑️)**
 
 ### Realizar Conciliación
 
@@ -772,7 +711,6 @@ npx http-server
 ### Configuración de Base de Datos
 
 El proyecto usa `Cl_dcytDb` que se conecta automáticamente. Las tablas se crean con los nombres:
-- `Categorias_Prueba.V1`
 - `Movimientos_Prueba.V1`
 
 ### Estructura de Compilación
